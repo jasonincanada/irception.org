@@ -43,12 +43,12 @@ Temporary Items
 .apdisk
 
 # .NET compiled binaries
-ircbot.Domain/bin
-ircbot.Domain/obj
-ircbot.Tests/bin
-ircbot.Tests/obj
-ircbot.Web/bin
-ircbot.Web/obj
+irception.Domain/bin
+irception.Domain/obj
+irception.Tests/bin
+irception.Tests/obj
+irception.Web/bin
+irception.Web/obj
 
 # Misc Visual Studio files
 *.user
