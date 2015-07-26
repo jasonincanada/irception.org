@@ -41,3 +41,25 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# .NET compiled binaries
+ircbot.Domain/bin
+ircbot.Domain/obj
+ircbot.Tests/bin
+ircbot.Tests/obj
+ircbot.Web/bin
+ircbot.Web/obj
+
+# Misc Visual Studio files
+*.user
+*.suo
+App.config
+Web.config
+
+.vs/
+Documentation/notes.txt
+*.edmx.diagram
+*.pubxml
+packages/EntityFramework.5.0.0
+packages/Newtonsoft.Json.7.0.1/
+packages/NUnit.2.6.4/
