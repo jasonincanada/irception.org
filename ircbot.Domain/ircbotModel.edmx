@@ -876,6 +876,33 @@
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
-    <Diagrams></Diagrams>
+    <Diagrams>
+      <Diagram DiagramId="30d6ab88e69e4240b3852dc378367386" Name="Diagram1">
+        <EntityTypeShape EntityType="ircbotModel.User" Width="1.5" PointX="8.5" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Network" Width="1.5" PointX="2.5" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Server" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Channel" Width="1.5" PointX="4.375" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Line" Width="1.5" PointX="2.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.URL" Width="1.5" PointX="4.375" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.URLUpdateHistory" Width="1.5" PointX="6.25" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Session" Width="1.5" PointX="2.625" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Token" Width="1.5" PointX="10.375" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Ignore" Width="1.5" PointX="8.5" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Permission" Width="1.5" PointX="6.375" PointY="1.25" IsExpanded="true" />
+        <AssociationConnector Association="ircbotModel.FK_Server_FKNetworkID" ManuallyRouted="false" />
+        <AssociationConnector Association="ircbotModel.FK_Channel_FKNetworkID" ManuallyRouted="false" />
+        <AssociationConnector Association="ircbotModel.FK_Line_FKChannelID" ManuallyRouted="false" />
+        <AssociationConnector Association="ircbotModel.FK_URL_FKChannelID" ManuallyRouted="false" />
+        <AssociationConnector Association="ircbotModel.FK_URLUpdateHistory_FKURLID" ManuallyRouted="false" />
+        <AssociationConnector Association="ircbotModel.FK_Session_FKChannelID" ManuallyRouted="false" />
+        <AssociationConnector Association="ircbotModel.FK_Token_FKUserID" ManuallyRouted="false" />
+        <AssociationConnector Association="ircbotModel.FK_Ignore_FKChannelID" ManuallyRouted="false" />
+        <AssociationConnector Association="ircbotModel.FK_Ignore_FKUserIDAddedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="ircbotModel.FK_Permission_FKChannelID" ManuallyRouted="false" />
+        <AssociationConnector Association="ircbotModel.FK_Permission_FKUserID" ManuallyRouted="false" />
+        <AssociationConnector Association="ircbotModel.FK_Permission_FKUserIDGrantedBy" ManuallyRouted="false" />
+        <AssociationConnector Association="ircbotModel.FK_Permission_FKUserIDRevokedBy" ManuallyRouted="false" />
+      </Diagram>
+    </Diagrams>
   </Designer>
 </edmx:Edmx>
