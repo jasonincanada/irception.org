@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <title>irception.org</title>
+	<meta charset="utf-8" />
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.17/angular.min.js"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>    
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+
+    <link href="css/irc.css" rel="stylesheet" />
+    <link rel="icon" href="img/favicon.png" type="image/x-icon" />    
+
+    <script src="app/common.services.js?1"></script>
+    <script src="app/app.main.js?1"></script>
+    <script src="app/app.controllers.js?1"></script>
+    <script src="app/app.services.js"?1></script>    
+    
+</head>
+
+<body ng-app="ircApp" ng-controller="HomeController as vm">
+    
+    <nav class="navbar navbar-redness navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" href="" ui-sref="home"><img src="img/irception.png" alt="irception" /></a>
+            </div>
+
+            <div id="navbar">
+                <div class="navbar-right irc-nav">
+                    
+                    <a href="" ng-show="vm.Session.Nick">{{ vm.Session.Nick }}</a>
+
+                    <a href="" ng-show="false">{{ vm.Session.Token }}</a>                    
+                    <a href="" ng-show="vm.Session.UserID" ng-click="vm.goUser()"><span class="glyphicon glyphicon-user"></span> {{ vm.Session.Username }}</a>
+                    <a href="" ng-show="vm.Session.IP && false"><span class="glyphicon glyphicon-globe"></span> {{ vm.Session.IP }}</a>
+
+                    <a href="" ng-click="vm.goLogin()" ng-if="!vm.Session.UserID">Login</a>
+                </div>                            
+            </div>
+        </div>
+    </nav>
+    
+    <div ui-view style="padding-top: 50px;"></div>
+    
+</body>
+
+</html>

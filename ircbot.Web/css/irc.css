@@ -1,0 +1,76 @@
+/* irc.less - Run through dotLess compiler to create irc.css output */
+.navbar-redness {
+  background-color: #aa3a50;
+  border-color: #aa3a50;
+}
+.irc-nav {
+  margin-top: 15px;
+}
+.irc-nav a {
+  margin-left: 20px;
+}
+.irc-nav a:link {
+  color: #dba0ac;
+  text-decoration: none;
+}
+.irc-nav a:visited {
+  color: #dba0ac;
+  text-decoration: none;
+}
+.irc-nav a:hover {
+  color: white;
+  text-decoration: underline;
+}
+.irc-jumbo {
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 15pt;
+  line-height: 25pt;
+  color: #777777;
+  padding-left: 10px;
+  margin-top: 40px;
+}
+.channel-name-header {
+  color: #cccccc;
+  font-family: 'Raleway', sans-serif;
+  font-size: 26pt;
+  font-weight: normal;
+}
+.channel-name-header small {
+  font-size: 14pt;
+}
+span.elapsed {
+  font-size: 10pt;
+  color: #aaaaaa;
+}
+tr.new-link td {
+  background-color: #f6f6f6;
+}
+.link-table td {
+  font-family: Roboto;
+  font-size: 10pt;
+}
+.link-table td a:link {
+  color: #00a1df;
+  text-decoration: none;
+}
+.link-table td a:visited {
+  color: #aaaaaa;
+  text-decoration: none;
+}
+.irc-error {
+  color: #888888;
+}
+.irc-error strong {
+  color: #aa5a70;
+}
+.mod-action {
+  cursor: pointer;
+}
+.mod-action-nsfw {
+  color: red;
+}
+.url-nsfw {
+  font-weight: bold;
+  color: red;
+  font-size: 9pt;
+}

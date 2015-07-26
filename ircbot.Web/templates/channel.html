@@ -1,0 +1,44 @@
+﻿
+<div class="container">
+    <div class="row">
+                
+        <div class="col-md-12">
+            
+            <table class="table table-hover link-table" style="margin-top: 30px;">
+                <thead>
+                    <tr>
+                        <th style="width: 90px;">&nbsp;</th>
+                        <th style="width: 120px;">&nbsp;</th>
+                        <th style="padding: 0px 0px 0px 8px;"><span class="channel-name-header"><small>{{ vm.NetworkName }} / </small> {{ vm.Channel.Slug }}</span></th>
+                        <th ng-if="vm.Permission.attr"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="url in vm.URLs | orderBy: '-AtTicks' " ng-class="{ 'new-link': url.SecondsElapsed < 3600 }">
+                        <td class="text-center"><span class="elapsed">{{ url.ElapsedString }}</span></td>
+                        <td>{{ url.Nick }}</td>
+                        <td>
+                            <div ng-if="url.Type == null">
+                                <span ng-show="url.NSFW" class="url-nsfw">NSFW</span>
+                                <a href="" ng-href="{{ url.URL }}" target="_blank">{{ url.URL }}</a>                                
+                            </div>
+                                                    
+                            <div ng-if="url.Type == 'youtube'">
+                                <span style="float:left; margin-right: 10px;">
+                                    <a href="" ng-href="{{ url.URL }}" target="_blank"><img ng-src="{{ url.Thumbnail }}" width="48" title="{{ url.Description }}" alt="{{ url.Decription }}" style="border: 0px; cursor: pointer;" /></a>
+                                </span>
+                                
+                                <i>{{ url.Title }}</i><br />
+                                <span ng-show="url.NSFW" class="url-nsfw">NSFW</span>
+                                <a href="" ng-href="{{ url.URL }}" target="_blank">{{ url.URL }}</a>                                
+                            </div>             
+                        </td>
+                        <td ng-if="vm.Permission.attr">
+                            <span class="mod-action mod-action-nsfw" ng-click="vm.setNSFW(url.URLID)">+NSFW</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

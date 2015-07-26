@@ -1,0 +1,59 @@
+﻿{
+    "ChannelID": 2,
+    "Nick": "nirgle_",
+    "URL": "https://www.youtube.com/watch?feature=player_detailpage&v=p2nYjRCNII4#t=77",
+    "YouTube": {
+        "kind": "youtube#videoListResponse",
+        "etag": "\"iDqJ1j7zKs4x3o3ZsFlBOwgWAHU/gtyfkyUGpG5BkCf3yYoZnA_yNEU\"",
+        "pageInfo": {
+            "totalResults": 1,
+            "resultsPerPage": 1
+        },
+        "items": [{
+            "kind": "youtube#video",
+            "etag": "\"iDqJ1j7zKs4x3o3ZsFlBOwgWAHU/hJFnLsEd8B-n0_Hnbl-x-CnTe9k\"",
+            "id": "p2nYjRCNII4",
+            "snippet": {
+                "publishedAt": "2015-07-21T04:02:37.000Z",
+                "channelId": "UCHQESNIbXuQM-QUeMf7CFjQ",
+                "title": "Blinded By The Light (Time Ramesside - Part 2)",
+                "description": "Jason Welge is not responsible for any injury sustained from prolonged exposure to Time Ramesside's lighting.\n\n*Sorry for the long delay in the second part's release. Got side-tracked with other projects and it just fell on the backburner.\n\nPart One: https://www.youtube.com/watch?v=WWoagy78Oi4\n\n- Music -\n\"Hush\", \"Cephalopod\", & \"Opportunity Walks\" by Kevin MacLeod http://incompetech.com/\nLicense: CC: By Attribution 3.0\n\n• Twitter: https://twitter.com/AllShamNoWow\n• Live Stream: http://www.twitch.tv/allshamnowow",
+                "thumbnails": {
+                    "default": {
+                        "url": "https://i.ytimg.com/vi/p2nYjRCNII4/default.jpg",
+                        "width": 120,
+                        "height": 90
+                    },
+                    "medium": {
+                        "url": "https://i.ytimg.com/vi/p2nYjRCNII4/mqdefault.jpg",
+                        "width": 320,
+                        "height": 180
+                    },
+                    "high": {
+                        "url": "https://i.ytimg.com/vi/p2nYjRCNII4/hqdefault.jpg",
+                        "width": 480,
+                        "height": 360
+                    },
+                    "standard": {
+                        "url": "https://i.ytimg.com/vi/p2nYjRCNII4/sddefault.jpg",
+                        "width": 640,
+                        "height": 480
+                    },
+                    "maxres": {
+                        "url": "https://i.ytimg.com/vi/p2nYjRCNII4/maxresdefault.jpg",
+                        "width": 1280,
+                        "height": 720
+                    }
+                },
+                "channelTitle": "AllShamNoWow",
+                "tags": ["allshamnowow", "gameplay", "commentary", "highlights", "montage", "time ramesside", "a new reckoning"],
+                "categoryId": "20",
+                "liveBroadcastContent": "none",
+                "localized": {
+                    "title": "Blinded By The Light (Time Ramesside - Part 2)",
+                    "description": "Jason Welge is not responsible for any injury sustained from prolonged exposure to Time Ramesside's lighting.\n\n*Sorry for the long delay in the second part's release. Got side-tracked with other projects and it just fell on the backburner.\n\nPart One: https://www.youtube.com/watch?v=WWoagy78Oi4\n\n- Music -\n\"Hush\", \"Cephalopod\", & \"Opportunity Walks\" by Kevin MacLeod http://incompetech.com/\nLicense: CC: By Attribution 3.0\n\n• Twitter: https://twitter.com/AllShamNoWow\n• Live Stream: http://www.twitch.tv/allshamnowow"
+                }
+            }
+        }]
+    }
+}

@@ -1,0 +1,59 @@
+﻿
+<div class="container">
+    <h2>Configuration</h2>
+
+    <div ng-repeat="network in vm.Networks" class="network">
+
+        <h3>{{ network.Name }} <small>{{ network.Slug }}</small></h3>
+
+        <div ng-hide="network.IsActive"><strong><font color="red">This network is inactive.</font></strong></div>
+
+        <div class="row">
+            <div class="col-md-7">
+                <h4>Channels</h4>
+
+                <table class="table table-condensed table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Channel ID</th>
+                            <th>Name</th>
+                            <th>Slug</th>
+                            <th>In Channel</th>
+                            <th>URLs Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="channel in network.Channels">
+                            <td>{{ channel.ChannelID }}</td>
+                            <td>{{ channel.ChannelName }}</td>
+                            <td>{{ channel.Slug }}</td>
+                            <td>{{ channel.InChannel }}</td>
+                            <td><a href="" ng-click="vm.urlLink(network, channel)">URLs</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col-md-4">
+                <h4>Servers</h4>
+
+                <table class="table table-condensed table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Server ID</th>
+                            <th>Host</th>
+                            <th>Port</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="server in network.Servers">
+                            <td>{{ server.ServerID }}</td>
+                            <td>{{ server.Host }}</td>
+                            <td>{{ server.Port }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

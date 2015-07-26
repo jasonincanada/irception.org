@@ -1,0 +1,881 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ircbotModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Channel">
+          <Key>
+            <PropertyRef Name="ChannelID" />
+          </Key>
+          <Property Name="ChannelID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FKNetworkID" Type="int" Nullable="false" />
+          <Property Name="ChannelName" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="InChannel" Type="bit" Nullable="false" />
+          <Property Name="Slug" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Ignore">
+          <Key>
+            <PropertyRef Name="IgnoreID" />
+          </Key>
+          <Property Name="IgnoreID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FKChannelID" Type="int" Nullable="false" />
+          <Property Name="Nick" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateAdded" Type="datetime" Nullable="false" />
+          <Property Name="FKUserIDAddedBy" Type="int" Nullable="false" />
+          <Property Name="DateRemoved" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Line">
+          <Key>
+            <PropertyRef Name="LineID" />
+          </Key>
+          <Property Name="LineID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FKChannelID" Type="int" Nullable="false" />
+          <Property Name="At" Type="datetime" Nullable="false" />
+          <Property Name="Nick" Type="varchar" MaxLength="50" />
+          <Property Name="Length" Type="int" />
+        </EntityType>
+        <EntityType Name="Network">
+          <Key>
+            <PropertyRef Name="NetworkID" />
+          </Key>
+          <Property Name="NetworkID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nick" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="Slug" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="UserAttrID" />
+          </Key>
+          <Property Name="UserAttrID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FKUserID" Type="int" Nullable="false" />
+          <Property Name="FKChannelID" Type="int" Nullable="false" />
+          <Property Name="Permission" Type="varchar" MaxLength="20" />
+          <Property Name="FKUserIDGrantedBy" Type="int" Nullable="false" />
+          <Property Name="DateGranted" Type="datetime" Nullable="false" />
+          <Property Name="DateRevoked" Type="datetime" />
+          <Property Name="FKUserIDRevokedBy" Type="int" />
+          <Property Name="RevokedReason" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Server">
+          <Key>
+            <PropertyRef Name="ServerID" />
+          </Key>
+          <Property Name="ServerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FKNetworkID" Type="int" Nullable="false" />
+          <Property Name="Host" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Port" Type="int" />
+        </EntityType>
+        <EntityType Name="Session">
+          <Key>
+            <PropertyRef Name="SessionID" />
+          </Key>
+          <Property Name="SessionID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nick" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="NickUserHost" Type="varchar" MaxLength="200" />
+          <Property Name="FKChannelID" Type="int" />
+          <Property Name="Started" Type="datetime" Nullable="false" />
+          <Property Name="Ended" Type="datetime" />
+          <Property Name="EndedReason" Type="varchar" MaxLength="200" />
+          <Property Name="SUID" Type="varchar" MaxLength="32" />
+        </EntityType>
+        <EntityType Name="Token">
+          <Key>
+            <PropertyRef Name="TokenID" />
+          </Key>
+          <Property Name="TokenID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Started" Type="datetime" Nullable="false" />
+          <Property Name="Ended" Type="datetime" />
+          <Property Name="EndedReason" Type="varchar" MaxLength="200" />
+          <Property Name="Token" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="IP" Type="varchar" MaxLength="15" />
+          <Property Name="FKUserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="URL">
+          <Key>
+            <PropertyRef Name="URLID" />
+          </Key>
+          <Property Name="URLID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FKChannelID" Type="int" Nullable="false" />
+          <Property Name="URL" Type="varchar" MaxLength="2000" Nullable="false" />
+          <Property Name="At" Type="datetime" Nullable="false" />
+          <Property Name="Nick" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Type" Type="varchar" MaxLength="20" />
+          <Property Name="Thumbnail" Type="varchar" MaxLength="200" />
+          <Property Name="Title" Type="varchar" MaxLength="200" />
+          <Property Name="Description" Type="varchar" MaxLength="4000" />
+          <Property Name="NSFW" Type="bit" />
+        </EntityType>
+        <EntityType Name="URLUpdateHistory">
+          <Key>
+            <PropertyRef Name="URLUpdateHistoryID" />
+          </Key>
+          <Property Name="URLUpdateHistoryID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FKURLID" Type="int" Nullable="false" />
+          <Property Name="At" Type="datetime" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DateAdded" Type="datetime" Nullable="false" />
+          <Property Name="DateDeleted" Type="datetime" />
+          <Property Name="Username" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="PasswordSHA256" Type="varchar" MaxLength="64" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Channel_FKNetworkID">
+          <End Role="Network" Type="Self.Network" Multiplicity="1" />
+          <End Role="Channel" Type="Self.Channel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Network">
+              <PropertyRef Name="NetworkID" />
+            </Principal>
+            <Dependent Role="Channel">
+              <PropertyRef Name="FKNetworkID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ignore_FKChannelID">
+          <End Role="Channel" Type="Self.Channel" Multiplicity="1" />
+          <End Role="Ignore" Type="Self.Ignore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="Ignore">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ignore_FKUserIDAddedBy">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Ignore" Type="Self.Ignore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Ignore">
+              <PropertyRef Name="FKUserIDAddedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Line_FKChannelID">
+          <End Role="Channel" Type="Self.Channel" Multiplicity="1" />
+          <End Role="Line" Type="Self.Line" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="Line">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_FKChannelID">
+          <End Role="Channel" Type="Self.Channel" Multiplicity="1" />
+          <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_FKUserID">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="FKUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_FKUserIDGrantedBy">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="FKUserIDGrantedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_FKUserIDRevokedBy">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="FKUserIDRevokedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Server_FKNetworkID">
+          <End Role="Network" Type="Self.Network" Multiplicity="1" />
+          <End Role="Server" Type="Self.Server" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Network">
+              <PropertyRef Name="NetworkID" />
+            </Principal>
+            <Dependent Role="Server">
+              <PropertyRef Name="FKNetworkID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Session_FKChannelID">
+          <End Role="Channel" Type="Self.Channel" Multiplicity="0..1" />
+          <End Role="Session" Type="Self.Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Token_FKUserID">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Token" Type="Self.Token" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Token">
+              <PropertyRef Name="FKUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_URL_FKChannelID">
+          <End Role="Channel" Type="Self.Channel" Multiplicity="1" />
+          <End Role="URL" Type="Self.URL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="URL">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_URLUpdateHistory_FKURLID">
+          <End Role="URL" Type="Self.URL" Multiplicity="1" />
+          <End Role="URLUpdateHistory" Type="Self.URLUpdateHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="URL">
+              <PropertyRef Name="URLID" />
+            </Principal>
+            <Dependent Role="URLUpdateHistory">
+              <PropertyRef Name="FKURLID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ircbotModelStoreContainer">
+          <EntitySet Name="Channel" EntityType="Self.Channel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ignore" EntityType="Self.Ignore" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Line" EntityType="Self.Line" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Network" EntityType="Self.Network" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Server" EntityType="Self.Server" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Session" EntityType="Self.Session" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Token" EntityType="Self.Token" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="URL" EntityType="Self.URL" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="URLUpdateHistory" EntityType="Self.URLUpdateHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Channel_FKNetworkID" Association="Self.FK_Channel_FKNetworkID">
+            <End Role="Network" EntitySet="Network" />
+            <End Role="Channel" EntitySet="Channel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ignore_FKChannelID" Association="Self.FK_Ignore_FKChannelID">
+            <End Role="Channel" EntitySet="Channel" />
+            <End Role="Ignore" EntitySet="Ignore" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ignore_FKUserIDAddedBy" Association="Self.FK_Ignore_FKUserIDAddedBy">
+            <End Role="User" EntitySet="User" />
+            <End Role="Ignore" EntitySet="Ignore" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Line_FKChannelID" Association="Self.FK_Line_FKChannelID">
+            <End Role="Channel" EntitySet="Channel" />
+            <End Role="Line" EntitySet="Line" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_FKChannelID" Association="Self.FK_Permission_FKChannelID">
+            <End Role="Channel" EntitySet="Channel" />
+            <End Role="Permission" EntitySet="Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_FKUserID" Association="Self.FK_Permission_FKUserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="Permission" EntitySet="Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_FKUserIDGrantedBy" Association="Self.FK_Permission_FKUserIDGrantedBy">
+            <End Role="User" EntitySet="User" />
+            <End Role="Permission" EntitySet="Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_FKUserIDRevokedBy" Association="Self.FK_Permission_FKUserIDRevokedBy">
+            <End Role="User" EntitySet="User" />
+            <End Role="Permission" EntitySet="Permission" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Server_FKNetworkID" Association="Self.FK_Server_FKNetworkID">
+            <End Role="Network" EntitySet="Network" />
+            <End Role="Server" EntitySet="Server" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Session_FKChannelID" Association="Self.FK_Session_FKChannelID">
+            <End Role="Channel" EntitySet="Channel" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Token_FKUserID" Association="Self.FK_Token_FKUserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="Token" EntitySet="Token" />
+          </AssociationSet>
+          <AssociationSet Name="FK_URL_FKChannelID" Association="Self.FK_URL_FKChannelID">
+            <End Role="Channel" EntitySet="Channel" />
+            <End Role="URL" EntitySet="URL" />
+          </AssociationSet>
+          <AssociationSet Name="FK_URLUpdateHistory_FKURLID" Association="Self.FK_URLUpdateHistory_FKURLID">
+            <End Role="URL" EntitySet="URL" />
+            <End Role="URLUpdateHistory" EntitySet="URLUpdateHistory" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ircbotModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DateAdded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateDeleted" Type="DateTime" Precision="3" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="PasswordSHA256" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Ignores" Relationship="ircbotModel.FK_Ignore_FKUserIDAddedBy" FromRole="User" ToRole="Ignore" />
+          <NavigationProperty Name="Permissions" Relationship="ircbotModel.FK_Permission_FKUserID" FromRole="User" ToRole="Permission" />
+        </EntityType>
+        <EntityContainer Name="ircbotEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Networks" EntityType="ircbotModel.Network" />
+          <EntitySet Name="Servers" EntityType="ircbotModel.Server" />
+          <AssociationSet Name="FK_Server_FKNetworkID" Association="ircbotModel.FK_Server_FKNetworkID">
+            <End Role="Network" EntitySet="Networks" />
+            <End Role="Server" EntitySet="Servers" />
+          </AssociationSet>
+          <EntitySet Name="Channels" EntityType="ircbotModel.Channel" />
+          <AssociationSet Name="FK_Channel_FKNetworkID" Association="ircbotModel.FK_Channel_FKNetworkID">
+            <End Role="Network" EntitySet="Networks" />
+            <End Role="Channel" EntitySet="Channels" />
+          </AssociationSet>
+          <EntitySet Name="Lines" EntityType="ircbotModel.Line" />
+          <AssociationSet Name="FK_Line_FKChannelID" Association="ircbotModel.FK_Line_FKChannelID">
+            <End Role="Channel" EntitySet="Channels" />
+            <End Role="Line" EntitySet="Lines" />
+          </AssociationSet>
+          <EntitySet Name="URLs" EntityType="ircbotModel.URL" />
+          <AssociationSet Name="FK_URL_FKChannelID" Association="ircbotModel.FK_URL_FKChannelID">
+            <End Role="Channel" EntitySet="Channels" />
+            <End Role="URL" EntitySet="URLs" />
+          </AssociationSet>
+          <EntitySet Name="URLUpdateHistories" EntityType="ircbotModel.URLUpdateHistory" />
+          <AssociationSet Name="FK_URLUpdateHistory_FKURLID" Association="ircbotModel.FK_URLUpdateHistory_FKURLID">
+            <End Role="URL" EntitySet="URLs" />
+            <End Role="URLUpdateHistory" EntitySet="URLUpdateHistories" />
+          </AssociationSet>
+          <EntitySet Name="Sessions" EntityType="ircbotModel.Session" />
+          <AssociationSet Name="FK_Session_FKChannelID" Association="ircbotModel.FK_Session_FKChannelID">
+            <End Role="Channel" EntitySet="Channels" />
+            <End Role="Session" EntitySet="Sessions" />
+          </AssociationSet>
+          <EntitySet Name="Tokens" EntityType="ircbotModel.Token" />
+          <AssociationSet Name="FK_Token_FKUserID" Association="ircbotModel.FK_Token_FKUserID">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Token" EntitySet="Tokens" />
+          </AssociationSet>
+          <EntitySet Name="Ignores" EntityType="ircbotModel.Ignore" />
+          <AssociationSet Name="FK_Ignore_FKChannelID" Association="ircbotModel.FK_Ignore_FKChannelID">
+            <End Role="Channel" EntitySet="Channels" />
+            <End Role="Ignore" EntitySet="Ignores" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Ignore_FKUserIDAddedBy" Association="ircbotModel.FK_Ignore_FKUserIDAddedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Ignore" EntitySet="Ignores" />
+          </AssociationSet>
+          <EntitySet Name="Permissions" EntityType="ircbotModel.Permission" />
+          <AssociationSet Name="FK_Permission_FKChannelID" Association="ircbotModel.FK_Permission_FKChannelID">
+            <End Role="Channel" EntitySet="Channels" />
+            <End Role="Permission" EntitySet="Permissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_FKUserID" Association="ircbotModel.FK_Permission_FKUserID">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Permission" EntitySet="Permissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_FKUserIDGrantedBy" Association="ircbotModel.FK_Permission_FKUserIDGrantedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Permission" EntitySet="Permissions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Permission_FKUserIDRevokedBy" Association="ircbotModel.FK_Permission_FKUserIDRevokedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Permission" EntitySet="Permissions" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Network">
+          <Key>
+            <PropertyRef Name="NetworkID" />
+          </Key>
+          <Property Name="NetworkID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Nick" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Servers" Relationship="ircbotModel.FK_Server_FKNetworkID" FromRole="Network" ToRole="Server" />
+          <NavigationProperty Name="Channels" Relationship="ircbotModel.FK_Channel_FKNetworkID" FromRole="Network" ToRole="Channel" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Slug" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Server">
+          <Key>
+            <PropertyRef Name="ServerID" />
+          </Key>
+          <Property Name="ServerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FKNetworkID" Type="Int32" Nullable="false" />
+          <Property Name="Host" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Port" Type="Int32" />
+          <NavigationProperty Name="Network" Relationship="ircbotModel.FK_Server_FKNetworkID" FromRole="Server" ToRole="Network" />
+        </EntityType>
+        <Association Name="FK_Server_FKNetworkID">
+          <End Type="ircbotModel.Network" Role="Network" Multiplicity="1" />
+          <End Type="ircbotModel.Server" Role="Server" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Network">
+              <PropertyRef Name="NetworkID" />
+            </Principal>
+            <Dependent Role="Server">
+              <PropertyRef Name="FKNetworkID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Channel">
+          <Key>
+            <PropertyRef Name="ChannelID" />
+          </Key>
+          <Property Name="ChannelID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FKNetworkID" Type="Int32" Nullable="false" />
+          <Property Name="ChannelName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="InChannel" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Network" Relationship="ircbotModel.FK_Channel_FKNetworkID" FromRole="Channel" ToRole="Network" />
+          <NavigationProperty Name="Lines" Relationship="ircbotModel.FK_Line_FKChannelID" FromRole="Channel" ToRole="Line" />
+          <NavigationProperty Name="URLs" Relationship="ircbotModel.FK_URL_FKChannelID" FromRole="Channel" ToRole="URL" />
+          <Property Name="Slug" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Ignores" Relationship="ircbotModel.FK_Ignore_FKChannelID" FromRole="Channel" ToRole="Ignore" />
+          <NavigationProperty Name="Permissions" Relationship="ircbotModel.FK_Permission_FKChannelID" FromRole="Channel" ToRole="Permission" />
+        </EntityType>
+        <Association Name="FK_Channel_FKNetworkID">
+          <End Type="ircbotModel.Network" Role="Network" Multiplicity="1" />
+          <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Network">
+              <PropertyRef Name="NetworkID" />
+            </Principal>
+            <Dependent Role="Channel">
+              <PropertyRef Name="FKNetworkID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Line">
+          <Key>
+            <PropertyRef Name="LineID" />
+          </Key>
+          <Property Name="LineID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FKChannelID" Type="Int32" Nullable="false" />
+          <Property Name="At" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Nick" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Length" Type="Int32" />
+          <NavigationProperty Name="Channel" Relationship="ircbotModel.FK_Line_FKChannelID" FromRole="Line" ToRole="Channel" />
+        </EntityType>
+        <Association Name="FK_Line_FKChannelID">
+          <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="1" />
+          <End Type="ircbotModel.Line" Role="Line" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="Line">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="URL">
+          <Key>
+            <PropertyRef Name="URLID" />
+          </Key>
+          <Property Name="URLID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FKChannelID" Type="Int32" Nullable="false" />
+          <Property Name="URL1" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="At" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Nick" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Channel" Relationship="ircbotModel.FK_URL_FKChannelID" FromRole="URL" ToRole="Channel" />
+          <Property Name="Type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Thumbnail" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="NSFW" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_URL_FKChannelID">
+          <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="1" />
+          <End Type="ircbotModel.URL" Role="URL" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="URL">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="URLUpdateHistory">
+          <Key>
+            <PropertyRef Name="URLUpdateHistoryID" />
+          </Key>
+          <Property Name="URLUpdateHistoryID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FKURLID" Type="Int32" Nullable="false" />
+          <Property Name="At" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="URL" Relationship="ircbotModel.FK_URLUpdateHistory_FKURLID" FromRole="URLUpdateHistory" ToRole="URL" />
+        </EntityType>
+        <Association Name="FK_URLUpdateHistory_FKURLID">
+          <End Type="ircbotModel.URL" Role="URL" Multiplicity="1" />
+          <End Type="ircbotModel.URLUpdateHistory" Role="URLUpdateHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="URL">
+              <PropertyRef Name="URLID" />
+            </Principal>
+            <Dependent Role="URLUpdateHistory">
+              <PropertyRef Name="FKURLID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Session">
+          <Key>
+            <PropertyRef Name="SessionID" />
+          </Key>
+          <Property Name="SessionID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nick" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NickUserHost" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="FKChannelID" Type="Int32" />
+          <Property Name="Started" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Ended" Type="DateTime" Precision="3" />
+          <Property Name="EndedReason" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Channel" Relationship="ircbotModel.FK_Session_FKChannelID" FromRole="Session" ToRole="Channel" />
+          <Property Name="SUID" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_Session_FKChannelID">
+          <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="0..1" />
+          <End Type="ircbotModel.Session" Role="Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Token">
+          <Key>
+            <PropertyRef Name="TokenID" />
+          </Key>
+          <Property Name="TokenID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Started" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Ended" Type="DateTime" Precision="3" />
+          <Property Name="EndedReason" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Token1" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="IP" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="FKUserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="ircbotModel.FK_Token_FKUserID" FromRole="Token" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Token_FKUserID">
+          <End Type="ircbotModel.User" Role="User" Multiplicity="1" />
+          <End Type="ircbotModel.Token" Role="Token" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Token">
+              <PropertyRef Name="FKUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Ignore">
+          <Key>
+            <PropertyRef Name="IgnoreID" />
+          </Key>
+          <Property Name="IgnoreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FKChannelID" Type="Int32" Nullable="false" />
+          <Property Name="Nick" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DateAdded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FKUserIDAddedBy" Type="Int32" Nullable="false" />
+          <Property Name="DateRemoved" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Channel" Relationship="ircbotModel.FK_Ignore_FKChannelID" FromRole="Ignore" ToRole="Channel" />
+          <NavigationProperty Name="User" Relationship="ircbotModel.FK_Ignore_FKUserIDAddedBy" FromRole="Ignore" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Ignore_FKChannelID">
+          <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="1" />
+          <End Type="ircbotModel.Ignore" Role="Ignore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="Ignore">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Ignore_FKUserIDAddedBy">
+          <End Type="ircbotModel.User" Role="User" Multiplicity="1" />
+          <End Type="ircbotModel.Ignore" Role="Ignore" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Ignore">
+              <PropertyRef Name="FKUserIDAddedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Permission">
+          <Key>
+            <PropertyRef Name="UserAttrID" />
+          </Key>
+          <Property Name="UserAttrID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FKUserID" Type="Int32" Nullable="false" />
+          <Property Name="FKChannelID" Type="Int32" Nullable="false" />
+          <Property Name="Permission1" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FKUserIDGrantedBy" Type="Int32" Nullable="false" />
+          <Property Name="DateGranted" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateRevoked" Type="DateTime" Precision="3" />
+          <Property Name="FKUserIDRevokedBy" Type="Int32" />
+          <Property Name="RevokedReason" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Channel" Relationship="ircbotModel.FK_Permission_FKChannelID" FromRole="Permission" ToRole="Channel" />
+          <NavigationProperty Name="User" Relationship="ircbotModel.FK_Permission_FKUserID" FromRole="Permission" ToRole="User" />
+          <NavigationProperty Name="UserGrantedBy" Relationship="ircbotModel.FK_Permission_FKUserIDGrantedBy" FromRole="Permission" ToRole="User" />
+          <NavigationProperty Name="UserRevokedBy" Relationship="ircbotModel.FK_Permission_FKUserIDRevokedBy" FromRole="Permission" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Permission_FKChannelID">
+          <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="1" />
+          <End Type="ircbotModel.Permission" Role="Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_FKUserID">
+          <End Type="ircbotModel.User" Role="User" Multiplicity="1" />
+          <End Type="ircbotModel.Permission" Role="Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="FKUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_FKUserIDGrantedBy">
+          <End Type="ircbotModel.User" Role="User" Multiplicity="1" />
+          <End Type="ircbotModel.Permission" Role="Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="FKUserIDGrantedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Permission_FKUserIDRevokedBy">
+          <End Type="ircbotModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="ircbotModel.Permission" Role="Permission" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Permission">
+              <PropertyRef Name="FKUserIDRevokedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ircbotModelStoreContainer" CdmEntityContainer="ircbotEntities">
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ircbotModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="PasswordSHA256" ColumnName="PasswordSHA256" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="DateDeleted" ColumnName="DateDeleted" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Networks">
+            <EntityTypeMapping TypeName="ircbotModel.Network">
+              <MappingFragment StoreEntitySet="Network">
+                <ScalarProperty Name="Slug" ColumnName="Slug" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="NetworkID" ColumnName="NetworkID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Servers">
+            <EntityTypeMapping TypeName="ircbotModel.Server">
+              <MappingFragment StoreEntitySet="Server">
+                <ScalarProperty Name="Port" ColumnName="Port" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="FKNetworkID" ColumnName="FKNetworkID" />
+                <ScalarProperty Name="ServerID" ColumnName="ServerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Channels">
+            <EntityTypeMapping TypeName="ircbotModel.Channel">
+              <MappingFragment StoreEntitySet="Channel">
+                <ScalarProperty Name="Slug" ColumnName="Slug" />
+                <ScalarProperty Name="InChannel" ColumnName="InChannel" />
+                <ScalarProperty Name="ChannelName" ColumnName="ChannelName" />
+                <ScalarProperty Name="FKNetworkID" ColumnName="FKNetworkID" />
+                <ScalarProperty Name="ChannelID" ColumnName="ChannelID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lines">
+            <EntityTypeMapping TypeName="ircbotModel.Line">
+              <MappingFragment StoreEntitySet="Line">
+                <ScalarProperty Name="Length" ColumnName="Length" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="At" ColumnName="At" />
+                <ScalarProperty Name="FKChannelID" ColumnName="FKChannelID" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="URLs">
+            <EntityTypeMapping TypeName="ircbotModel.URL">
+              <MappingFragment StoreEntitySet="URL">
+                <ScalarProperty Name="NSFW" ColumnName="NSFW" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Thumbnail" ColumnName="Thumbnail" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="At" ColumnName="At" />
+                <ScalarProperty Name="URL1" ColumnName="URL" />
+                <ScalarProperty Name="FKChannelID" ColumnName="FKChannelID" />
+                <ScalarProperty Name="URLID" ColumnName="URLID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="URLUpdateHistories">
+            <EntityTypeMapping TypeName="ircbotModel.URLUpdateHistory">
+              <MappingFragment StoreEntitySet="URLUpdateHistory">
+                <ScalarProperty Name="At" ColumnName="At" />
+                <ScalarProperty Name="FKURLID" ColumnName="FKURLID" />
+                <ScalarProperty Name="URLUpdateHistoryID" ColumnName="URLUpdateHistoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sessions">
+            <EntityTypeMapping TypeName="ircbotModel.Session">
+              <MappingFragment StoreEntitySet="Session">
+                <ScalarProperty Name="SUID" ColumnName="SUID" />
+                <ScalarProperty Name="EndedReason" ColumnName="EndedReason" />
+                <ScalarProperty Name="Ended" ColumnName="Ended" />
+                <ScalarProperty Name="Started" ColumnName="Started" />
+                <ScalarProperty Name="FKChannelID" ColumnName="FKChannelID" />
+                <ScalarProperty Name="NickUserHost" ColumnName="NickUserHost" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tokens">
+            <EntityTypeMapping TypeName="ircbotModel.Token">
+              <MappingFragment StoreEntitySet="Token">
+                <ScalarProperty Name="FKUserID" ColumnName="FKUserID" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
+                <ScalarProperty Name="Token1" ColumnName="Token" />
+                <ScalarProperty Name="EndedReason" ColumnName="EndedReason" />
+                <ScalarProperty Name="Ended" ColumnName="Ended" />
+                <ScalarProperty Name="Started" ColumnName="Started" />
+                <ScalarProperty Name="TokenID" ColumnName="TokenID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ignores">
+            <EntityTypeMapping TypeName="ircbotModel.Ignore">
+              <MappingFragment StoreEntitySet="Ignore">
+                <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
+                <ScalarProperty Name="FKUserIDAddedBy" ColumnName="FKUserIDAddedBy" />
+                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="FKChannelID" ColumnName="FKChannelID" />
+                <ScalarProperty Name="IgnoreID" ColumnName="IgnoreID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Permissions">
+            <EntityTypeMapping TypeName="ircbotModel.Permission">
+              <MappingFragment StoreEntitySet="Permission">
+                <ScalarProperty Name="RevokedReason" ColumnName="RevokedReason" />
+                <ScalarProperty Name="FKUserIDRevokedBy" ColumnName="FKUserIDRevokedBy" />
+                <ScalarProperty Name="DateRevoked" ColumnName="DateRevoked" />
+                <ScalarProperty Name="DateGranted" ColumnName="DateGranted" />
+                <ScalarProperty Name="FKUserIDGrantedBy" ColumnName="FKUserIDGrantedBy" />
+                <ScalarProperty Name="Permission1" ColumnName="Permission" />
+                <ScalarProperty Name="FKChannelID" ColumnName="FKChannelID" />
+                <ScalarProperty Name="FKUserID" ColumnName="FKUserID" />
+                <ScalarProperty Name="UserAttrID" ColumnName="UserAttrID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
