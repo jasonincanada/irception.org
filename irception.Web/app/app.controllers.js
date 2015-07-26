@@ -28,26 +28,6 @@
         return vm;
     });
 
-    app.controller('SessionController', function ($http, $state, $stateParams, Session) {
-        var vm = this;
-
-        vm.Message = '';
-
-        $http
-          .get('/api/connect.ashx?SUID=' + $stateParams.SUID)
-	      .success(function (data) {
-
-	          Session.Auth(data);
-
-	          $state.go('channel', {
-	              networkSlug: data.NetworkSlug,
-	              channelSlug: data.ChannelSlug
-	          });
-	      });
-
-        return vm;
-    });
-
     app.controller('ConfigController', function ($state, DataService) {
         var vm = this;
 

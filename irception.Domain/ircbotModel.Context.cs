@@ -32,7 +32,6 @@ namespace irception.Domain
         public DbSet<Line> Lines { get; set; }
         public DbSet<URL> URLs { get; set; }
         public DbSet<URLUpdateHistory> URLUpdateHistories { get; set; }
-        public DbSet<Session> Sessions { get; set; }
         public DbSet<Token> Tokens { get; set; }
         public DbSet<Ignore> Ignores { get; set; }
         public DbSet<Permission> Permissions { get; set; }

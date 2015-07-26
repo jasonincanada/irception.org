@@ -30,11 +30,6 @@
                 templateUrl: 'templates/me.html',
                 controller: 'MeController as vm'
             })
-            .state('session', {
-                url: '/session/{SUID:[a-fA-F0-9]{32}}',
-                templateUrl: 'templates/session.html',
-                controller: 'SessionController as vm'
-            })
             .state('auth', {
                 url: '/auth/{SUID:[a-fA-F0-9]{32}}',
                 templateUrl: 'templates/login.html',

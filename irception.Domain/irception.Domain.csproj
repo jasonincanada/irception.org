@@ -55,7 +55,6 @@
     <Compile Include="API\AttrRequest.cs" />
     <Compile Include="API\AuthRequest.cs" />
     <Compile Include="API\LoginRequest.cs" />
-    <Compile Include="API\SessionRequest.cs" />
     <Compile Include="API\URLRequest.cs" />
     <Compile Include="Auth.cs">
       <DependentUpon>ircbotModel.tt</DependentUpon>
@@ -102,9 +101,6 @@
     <Compile Include="Repository\URL.cs" />
     <Compile Include="Repository\User.cs" />
     <Compile Include="Server.cs">
-      <DependentUpon>ircbotModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Session.cs">
       <DependentUpon>ircbotModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Token.cs">

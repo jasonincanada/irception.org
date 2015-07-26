@@ -83,19 +83,6 @@
           <Property Name="Host" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Port" Type="int" />
         </EntityType>
-        <EntityType Name="Session">
-          <Key>
-            <PropertyRef Name="SessionID" />
-          </Key>
-          <Property Name="SessionID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Nick" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="NickUserHost" Type="varchar" MaxLength="200" />
-          <Property Name="FKChannelID" Type="int" />
-          <Property Name="Started" Type="datetime" Nullable="false" />
-          <Property Name="Ended" Type="datetime" />
-          <Property Name="EndedReason" Type="varchar" MaxLength="200" />
-          <Property Name="SUID" Type="varchar" MaxLength="32" />
-        </EntityType>
         <EntityType Name="Token">
           <Key>
             <PropertyRef Name="TokenID" />
@@ -273,18 +260,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Session_FKChannelID">
-          <End Role="Channel" Type="Self.Channel" Multiplicity="0..1" />
-          <End Role="Session" Type="Self.Session" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Channel">
-              <PropertyRef Name="ChannelID" />
-            </Principal>
-            <Dependent Role="Session">
-              <PropertyRef Name="FKChannelID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Token_FKUserID">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="Token" Type="Self.Token" Multiplicity="*" />
@@ -329,7 +304,6 @@
           <EntitySet Name="Network" EntityType="Self.Network" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Server" EntityType="Self.Server" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Session" EntityType="Self.Session" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Token" EntityType="Self.Token" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="URL" EntityType="Self.URL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="URLUpdateHistory" EntityType="Self.URLUpdateHistory" Schema="dbo" store:Type="Tables" />
@@ -377,10 +351,6 @@
           <AssociationSet Name="FK_Server_FKNetworkID" Association="Self.FK_Server_FKNetworkID">
             <End Role="Network" EntitySet="Network" />
             <End Role="Server" EntitySet="Server" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Session_FKChannelID" Association="Self.FK_Session_FKChannelID">
-            <End Role="Channel" EntitySet="Channel" />
-            <End Role="Session" EntitySet="Session" />
           </AssociationSet>
           <AssociationSet Name="FK_Token_FKUserID" Association="Self.FK_Token_FKUserID">
             <End Role="User" EntitySet="User" />
@@ -439,11 +409,6 @@
           <AssociationSet Name="FK_URLUpdateHistory_FKURLID" Association="ircbotModel.FK_URLUpdateHistory_FKURLID">
             <End Role="URL" EntitySet="URLs" />
             <End Role="URLUpdateHistory" EntitySet="URLUpdateHistories" />
-          </AssociationSet>
-          <EntitySet Name="Sessions" EntityType="ircbotModel.Session" />
-          <AssociationSet Name="FK_Session_FKChannelID" Association="ircbotModel.FK_Session_FKChannelID">
-            <End Role="Channel" EntitySet="Channels" />
-            <End Role="Session" EntitySet="Sessions" />
           </AssociationSet>
           <EntitySet Name="Tokens" EntityType="ircbotModel.Token" />
           <AssociationSet Name="FK_Token_FKUserID" Association="ircbotModel.FK_Token_FKUserID">
@@ -616,32 +581,6 @@
             </Principal>
             <Dependent Role="URLUpdateHistory">
               <PropertyRef Name="FKURLID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="Session">
-          <Key>
-            <PropertyRef Name="SessionID" />
-          </Key>
-          <Property Name="SessionID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nick" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="NickUserHost" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="FKChannelID" Type="Int32" />
-          <Property Name="Started" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Ended" Type="DateTime" Precision="3" />
-          <Property Name="EndedReason" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Channel" Relationship="ircbotModel.FK_Session_FKChannelID" FromRole="Session" ToRole="Channel" />
-          <Property Name="SUID" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <Association Name="FK_Session_FKChannelID">
-          <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="0..1" />
-          <End Type="ircbotModel.Session" Role="Session" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Channel">
-              <PropertyRef Name="ChannelID" />
-            </Principal>
-            <Dependent Role="Session">
-              <PropertyRef Name="FKChannelID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -898,20 +837,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Sessions">
-            <EntityTypeMapping TypeName="ircbotModel.Session">
-              <MappingFragment StoreEntitySet="Session">
-                <ScalarProperty Name="SUID" ColumnName="SUID" />
-                <ScalarProperty Name="EndedReason" ColumnName="EndedReason" />
-                <ScalarProperty Name="Ended" ColumnName="Ended" />
-                <ScalarProperty Name="Started" ColumnName="Started" />
-                <ScalarProperty Name="FKChannelID" ColumnName="FKChannelID" />
-                <ScalarProperty Name="NickUserHost" ColumnName="NickUserHost" />
-                <ScalarProperty Name="Nick" ColumnName="Nick" />
-                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Tokens">
             <EntityTypeMapping TypeName="ircbotModel.Token">
               <MappingFragment StoreEntitySet="Token">
@@ -997,7 +922,6 @@
         <EntityTypeShape EntityType="ircbotModel.Line" Width="1.5" PointX="2.5" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.URL" Width="1.5" PointX="4.375" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.URLUpdateHistory" Width="1.5" PointX="6.25" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Session" Width="1.5" PointX="2.5" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.Token" Width="1.5" PointX="10.375" PointY="2.375" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.Ignore" Width="1.5" PointX="8.5" PointY="5.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.Permission" Width="1.5" PointX="6.375" PointY="1.25" IsExpanded="true" />
@@ -1006,7 +930,6 @@
         <AssociationConnector Association="ircbotModel.FK_Line_FKChannelID" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_URL_FKChannelID" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_URLUpdateHistory_FKURLID" ManuallyRouted="false" />
-        <AssociationConnector Association="ircbotModel.FK_Session_FKChannelID" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Token_FKUserID" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Ignore_FKChannelID" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Ignore_FKUserIDAddedBy" ManuallyRouted="false" />
@@ -1014,7 +937,7 @@
         <AssociationConnector Association="ircbotModel.FK_Permission_FKUserID" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Permission_FKUserIDGrantedBy" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Permission_FKUserIDRevokedBy" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="ircbotModel.Auth" Width="1.5" PointX="0.5" PointY="5.625" />
+        <EntityTypeShape EntityType="ircbotModel.Auth" Width="1.5" PointX="2.375" PointY="6.25" />
         <AssociationConnector Association="ircbotModel.FK_Auth_FKNetworkID" />
         <AssociationConnector Association="ircbotModel.FK_Auth_FKUserID" />
       </Diagram>

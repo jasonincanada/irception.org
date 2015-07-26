@@ -84,33 +84,7 @@ namespace irception.Domain
 
             return token.TokenID;
         }
-
-        /// <summary>
-        /// Get existing Session object by its SUID
-        /// </summary>
-        /// <param name="suid"></param>
-        /// <returns></returns>
-        public Session GetSession(string suid)
-        {
-            return _context
-                .Sessions
-                .Include("Channel")
-                .Include("Channel.Network")
-                .Where(s => s.SUID == suid)
-                .FirstOrDefault();
-        }
-
-        /// <summary>
-        /// Add a Session object to the database.  Does not call SaveChanges() on the context.
-        /// </summary>
-        /// <param name="session"></param>
-        public void AddSession(Session session)
-        {
-            _context
-                .Sessions
-                .Add(session);
-        }
-
+        
         /// <summary>
         /// Add an Auth object to the database.  Does not call SaveChanges() on the context.
         /// </summary>
