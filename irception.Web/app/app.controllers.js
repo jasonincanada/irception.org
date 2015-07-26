@@ -84,7 +84,7 @@
         return vm;
     });
 
-    app.controller('LoginController', function ($state, $timeout, Session, DataService) {
+    app.controller('LoginController', function ($state, $stateParams, $timeout, Session, DataService) {
         var vm = this;
 
         vm.username = '';
@@ -105,14 +105,29 @@
                 return;
             }
 
-            DataService.login(vm.username, vm.password, function (data) {
+            var params = {
+                Username: vm.username,
+                Password: vm.password
+            };
+
+            // Normal login requires the username and password only.  Auth logins need a SUID
+            if ($state.current.name == 'auth') {
+                params.SUID = $stateParams.SUID;
+            }
+
+            DataService.login(params, function (data) {
                 if (data.success) {
                     Session.loggedIn(data);
 
-                    $state.go('channel', {
-                        channelSlug: 'dropnet',
-                        networkSlug: 'dr'
-                    });
+                    // If we've just authenticated via IRC PM, go to 'me' state
+                    if ($state.current.name == 'auth') {
+                        $state.go('me');
+                    } else {
+                        $state.go('channel', {
+                            channelSlug: 'dropnet',
+                            networkSlug: 'dr'
+                        });
+                    }
 
                     vm.error = undefined;
                 } else {

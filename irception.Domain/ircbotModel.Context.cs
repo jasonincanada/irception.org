@@ -36,5 +36,6 @@ namespace irception.Domain
         public DbSet<Token> Tokens { get; set; }
         public DbSet<Ignore> Ignores { get; set; }
         public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Auth> Auths { get; set; }
     }
 }

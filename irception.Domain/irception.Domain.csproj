@@ -53,9 +53,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\AttrRequest.cs" />
+    <Compile Include="API\AuthRequest.cs" />
     <Compile Include="API\LoginRequest.cs" />
     <Compile Include="API\SessionRequest.cs" />
     <Compile Include="API\URLRequest.cs" />
+    <Compile Include="Auth.cs">
+      <DependentUpon>ircbotModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Cache\ircCache.cs" />
     <Compile Include="Channel.cs">
       <DependentUpon>ircbotModel.tt</DependentUpon>
@@ -122,6 +126,7 @@
     <EntityDeploy Include="ircbotModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ircbotModel.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>irception.Domain</CustomToolNamespace>
     </EntityDeploy>
     <None Include="ircbotModel.edmx.diagram">
       <DependentUpon>ircbotModel.edmx</DependentUpon>
@@ -136,11 +141,13 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ircbotModel.edmx</DependentUpon>
       <LastGenOutput>ircbotModel.Context.cs</LastGenOutput>
+      <CustomToolNamespace>irception.Domain</CustomToolNamespace>
     </Content>
     <Content Include="ircbotModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ircbotModel.edmx</DependentUpon>
       <LastGenOutput>ircbotModel.cs</LastGenOutput>
+      <CustomToolNamespace>irception.Domain</CustomToolNamespace>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

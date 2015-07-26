@@ -71,6 +71,7 @@
     <Content Include="api\connect.ashx" />
     <Content Include="api\login.ashx" />
     <Content Include="api\attr.ashx" />
+    <Content Include="api\auth.ashx" />
     <None Include="css\irc.less" />
     <Content Include="app\app.controllers.js" />
     <Content Include="app\app.services.js" />
@@ -104,6 +105,9 @@
   <ItemGroup>
     <Compile Include="api\attr.ashx.cs">
       <DependentUpon>attr.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="api\auth.ashx.cs">
+      <DependentUpon>auth.ashx</DependentUpon>
     </Compile>
     <Compile Include="api\chan.ashx.cs">
       <DependentUpon>chan.ashx</DependentUpon>

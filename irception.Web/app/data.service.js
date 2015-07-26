@@ -12,12 +12,9 @@
 	            .success(successFunc);
         };
 
-        service.login = function (username, password, successFunc) {
+        service.login = function (params, successFunc) {
             $http
-                .post('/api/login.ashx', {
-                    Username: username,
-                    Password: password
-                })
+                .post('/api/login.ashx', params)
                 .success(successFunc);            
         };
 

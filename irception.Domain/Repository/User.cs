@@ -100,11 +100,48 @@ namespace irception.Domain
                 .FirstOrDefault();
         }
 
+        /// <summary>
+        /// Add a Session object to the database.  Does not call SaveChanges() on the context.
+        /// </summary>
+        /// <param name="session"></param>
         public void AddSession(Session session)
         {
             _context
                 .Sessions
                 .Add(session);
+        }
+
+        /// <summary>
+        /// Add an Auth object to the database.  Does not call SaveChanges() on the context.
+        /// </summary>
+        /// <param name="auth"></param>
+        public void AddAuth(Auth auth)
+        {
+            _context
+                .Auths
+                .Add(auth);
+        }
+
+        /// <summary>
+        /// Update the Auth table with the UserID that authenticated the token. Does not call SaveChanges() on the context.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="suid"></param>
+        public void MatchUserToAuthToken(User user, string suid)
+        {
+            var auth = _context
+                .Auths
+                .Where(a => a.SUID == suid)
+                .FirstOrDefault();
+
+            if (auth == null)
+                return;
+
+            if (auth.FKUserID != null)
+                return;
+
+            auth.FKUserID = user.UserID;
+            auth.DateAuthenticated = DateTime.UtcNow;
         }
     }
 }

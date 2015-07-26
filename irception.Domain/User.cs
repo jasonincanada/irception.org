@@ -18,6 +18,7 @@ namespace irception.Domain
         {
             this.Ignores = new HashSet<Ignore>();
             this.Permissions = new HashSet<Permission>();
+            this.Auths = new HashSet<Auth>();
         }
     
         public int UserID { get; set; }
@@ -28,5 +29,6 @@ namespace irception.Domain
     
         public virtual ICollection<Ignore> Ignores { get; set; }
         public virtual ICollection<Permission> Permissions { get; set; }
+        public virtual ICollection<Auth> Auths { get; set; }
     }
 }

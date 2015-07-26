@@ -10,8 +10,7 @@ namespace irception.Web.api
     /// Log an account in via username/password
     /// </summary>
     public class login : APIBase, IHttpHandler
-    {       
-
+    {
         public void ProcessRequest(HttpContext context)
         {
             string json;
@@ -26,6 +25,13 @@ namespace irception.Web.api
                 if (user != null)
                 {
                     Token token = repo.GetOrCreateToken(user);
+
+                    // If authorizing via PM auth command, store the UserID for this auth token
+                    if (!string.IsNullOrEmpty(requestParams.SUID))
+                    {
+                        repo.MatchUserToAuthToken(user, requestParams.SUID);
+                        repo.SaveChanges();
+                    }
                     
                     json = JsonConvert.SerializeObject(new
                     {

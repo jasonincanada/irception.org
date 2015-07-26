@@ -34,7 +34,7 @@ namespace irception.Web.api
                         {
                             API.DecorateURLForYouTube(url, requestParams.YouTube);
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                         }
                     }

@@ -35,6 +35,11 @@
                 templateUrl: 'templates/session.html',
                 controller: 'SessionController as vm'
             })
+            .state('auth', {
+                url: '/auth/{SUID:[a-fA-F0-9]{32}}',
+                templateUrl: 'templates/login.html',
+                controller: 'LoginController as vm'
+            })
             .state('channel', {
                 url: '/{networkSlug:[a-z]{1,2}}/{channelSlug:[a-zA-Z0-9]{1,20}}',
                 templateUrl: 'templates/channel.html',

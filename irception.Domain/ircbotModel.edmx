@@ -5,6 +5,20 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ircbotModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Auth">
+          <Key>
+            <PropertyRef Name="AuthID" />
+          </Key>
+          <Property Name="AuthID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nick" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="100" />
+          <Property Name="Host" Type="varchar" MaxLength="200" />
+          <Property Name="FKNetworkID" Type="int" />
+          <Property Name="DateIssued" Type="datetime" Nullable="false" />
+          <Property Name="FKUserID" Type="int" />
+          <Property Name="SUID" Type="varchar" MaxLength="32" />
+          <Property Name="DateAuthenticated" Type="datetime" />
+        </EntityType>
         <EntityType Name="Channel">
           <Key>
             <PropertyRef Name="ChannelID" />
@@ -127,6 +141,30 @@
           <Property Name="Username" Type="varchar" MaxLength="32" Nullable="false" />
           <Property Name="PasswordSHA256" Type="varchar" MaxLength="64" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Auth_FKNetworkID">
+          <End Role="Network" Type="Self.Network" Multiplicity="0..1" />
+          <End Role="Auth" Type="Self.Auth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Network">
+              <PropertyRef Name="NetworkID" />
+            </Principal>
+            <Dependent Role="Auth">
+              <PropertyRef Name="FKNetworkID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Auth_FKUserID">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Auth" Type="Self.Auth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Auth">
+              <PropertyRef Name="FKUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Channel_FKNetworkID">
           <End Role="Network" Type="Self.Network" Multiplicity="1" />
           <End Role="Channel" Type="Self.Channel" Multiplicity="*" />
@@ -284,6 +322,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="ircbotModelStoreContainer">
+          <EntitySet Name="Auth" EntityType="Self.Auth" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Channel" EntityType="Self.Channel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ignore" EntityType="Self.Ignore" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Line" EntityType="Self.Line" Schema="dbo" store:Type="Tables" />
@@ -295,6 +334,14 @@
           <EntitySet Name="URL" EntityType="Self.URL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="URLUpdateHistory" EntityType="Self.URLUpdateHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Auth_FKNetworkID" Association="Self.FK_Auth_FKNetworkID">
+            <End Role="Network" EntitySet="Network" />
+            <End Role="Auth" EntitySet="Auth" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Auth_FKUserID" Association="Self.FK_Auth_FKUserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="Auth" EntitySet="Auth" />
+          </AssociationSet>
           <AssociationSet Name="FK_Channel_FKNetworkID" Association="Self.FK_Channel_FKNetworkID">
             <End Role="Network" EntitySet="Network" />
             <End Role="Channel" EntitySet="Channel" />
@@ -363,6 +410,7 @@
           <Property Name="PasswordSHA256" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Ignores" Relationship="ircbotModel.FK_Ignore_FKUserIDAddedBy" FromRole="User" ToRole="Ignore" />
           <NavigationProperty Name="Permissions" Relationship="ircbotModel.FK_Permission_FKUserID" FromRole="User" ToRole="Permission" />
+          <NavigationProperty Name="Auths" Relationship="ircbotModel.FK_Auth_FKUserID" FromRole="User" ToRole="Auth" />
         </EntityType>
         <EntityContainer Name="ircbotEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Users" EntityType="Self.User" />
@@ -427,6 +475,15 @@
           <AssociationSet Name="FK_Permission_FKUserIDRevokedBy" Association="ircbotModel.FK_Permission_FKUserIDRevokedBy">
             <End Role="User" EntitySet="Users" />
             <End Role="Permission" EntitySet="Permissions" />
+          </AssociationSet>
+          <EntitySet Name="Auths" EntityType="ircbotModel.Auth" />
+          <AssociationSet Name="FK_Auth_FKNetworkID" Association="ircbotModel.FK_Auth_FKNetworkID">
+            <End Role="Network" EntitySet="Networks" />
+            <End Role="Auth" EntitySet="Auths" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Auth_FKUserID" Association="ircbotModel.FK_Auth_FKUserID">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Auth" EntitySet="Auths" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Network">
@@ -716,6 +773,46 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Auth">
+          <Key>
+            <PropertyRef Name="AuthID" />
+          </Key>
+          <Property Name="AuthID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nick" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Username" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Host" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="FKNetworkID" Type="Int32" />
+          <Property Name="DateIssued" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="FKUserID" Type="Int32" />
+          <Property Name="SUID" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Network" Relationship="ircbotModel.FK_Auth_FKNetworkID" FromRole="Auth" ToRole="Network" />
+          <NavigationProperty Name="User" Relationship="ircbotModel.FK_Auth_FKUserID" FromRole="Auth" ToRole="User" />
+          <Property Name="DateAuthenticated" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_Auth_FKNetworkID">
+          <End Type="ircbotModel.Network" Role="Network" Multiplicity="0..1" />
+          <End Type="ircbotModel.Auth" Role="Auth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Network">
+              <PropertyRef Name="NetworkID" />
+            </Principal>
+            <Dependent Role="Auth">
+              <PropertyRef Name="FKNetworkID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Auth_FKUserID">
+          <End Type="ircbotModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="ircbotModel.Auth" Role="Auth" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Auth">
+              <PropertyRef Name="FKUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -855,6 +952,21 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Auths">
+            <EntityTypeMapping TypeName="ircbotModel.Auth">
+              <MappingFragment StoreEntitySet="Auth">
+                <ScalarProperty Name="DateAuthenticated" ColumnName="DateAuthenticated" />
+                <ScalarProperty Name="SUID" ColumnName="SUID" />
+                <ScalarProperty Name="FKUserID" ColumnName="FKUserID" />
+                <ScalarProperty Name="DateIssued" ColumnName="DateIssued" />
+                <ScalarProperty Name="FKNetworkID" ColumnName="FKNetworkID" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="AuthID" ColumnName="AuthID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -885,7 +997,7 @@
         <EntityTypeShape EntityType="ircbotModel.Line" Width="1.5" PointX="2.5" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.URL" Width="1.5" PointX="4.375" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.URLUpdateHistory" Width="1.5" PointX="6.25" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Session" Width="1.5" PointX="2.625" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Session" Width="1.5" PointX="2.5" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.Token" Width="1.5" PointX="10.375" PointY="2.375" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.Ignore" Width="1.5" PointX="8.5" PointY="5.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.Permission" Width="1.5" PointX="6.375" PointY="1.25" IsExpanded="true" />
@@ -902,6 +1014,9 @@
         <AssociationConnector Association="ircbotModel.FK_Permission_FKUserID" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Permission_FKUserIDGrantedBy" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Permission_FKUserIDRevokedBy" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ircbotModel.Auth" Width="1.5" PointX="0.5" PointY="5.625" />
+        <AssociationConnector Association="ircbotModel.FK_Auth_FKNetworkID" />
+        <AssociationConnector Association="ircbotModel.FK_Auth_FKUserID" />
       </Diagram>
     </Diagrams>
   </Designer>
