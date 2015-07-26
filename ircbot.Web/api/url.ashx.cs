@@ -17,32 +17,44 @@ namespace ircbot.Web.api
                 var requestParams = API.GetURLRequestParams(requestBody);
                 var repo = new Repository();
 
-                URL url = new URL
+                if (!repo.OnIgnore(requestParams.Nick, requestParams.ChannelID))
                 {
-                    At = DateTime.UtcNow,
-                    Nick = requestParams.Nick,
-                    URL1 = requestParams.URL,
-                    FKChannelID = requestParams.ChannelID
-                };
 
-                if (requestParams.YouTube != null)
-                {
-                    try
+                    URL url = new URL
                     {
-                        API.DecorateURLForYouTube(url, requestParams.YouTube);
-                    }
-                    catch (Exception ex)
+                        At = DateTime.UtcNow,
+                        Nick = requestParams.Nick,
+                        URL1 = requestParams.URL,
+                        FKChannelID = requestParams.ChannelID
+                    };
+
+                    if (requestParams.YouTube != null)
                     {
+                        try
+                        {
+                            API.DecorateURLForYouTube(url, requestParams.YouTube);
+                        }
+                        catch (Exception ex)
+                        {
+                        }
                     }
+
+                    int urlID = repo.URL(url);
+
+                    json = JsonConvert.SerializeObject(new
+                    {
+                        success = true,
+                        ID = urlID
+                    });
                 }
-
-                int urlID = repo.URL(url);
-                
-                json = JsonConvert.SerializeObject(new
+                else
                 {
-                    success = true,
-                    ID = urlID
-                });
+                    json = JsonConvert.SerializeObject(new
+                    {
+                        success = false,
+                        error = "Ignored nick"
+                    });
+                }
             }
             catch (Exception ex)
             {
