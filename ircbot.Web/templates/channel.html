@@ -14,7 +14,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="url in vm.URLs | orderBy: '-AtTicks' " ng-class="{ 'new-link': url.SecondsElapsed < 3600 }">
+                    <tr ng-repeat="url in vm.URLs | orderBy: '-AtTicks' " ng-class="{ 'new-link': url.SecondsElapsed < 3600 }" class="channel-row">
                         <td class="text-center"><span class="elapsed">{{ url.ElapsedString }}</span></td>
                         <td>{{ url.Nick }}</td>
                         <td>
@@ -34,7 +34,8 @@
                             </div>             
                         </td>
                         <td ng-if="vm.Permission.attr">
-                            <span class="mod-action mod-action-nsfw" ng-click="vm.setNSFW(url.URLID)">+NSFW</span>
+                            <span class="mod-action mod-action-nsfw" ng-click="vm.setNSFW(url.URLID)" ng-if="! url.NSFW">+NSFW</span>
+                            <span class="mod-action mod-action-unnsfw" ng-click="vm.unsetNSFW(url.URLID)" ng-if="url.NSFW">-NSFW</span>
                         </td>
                     </tr>
                 </tbody>

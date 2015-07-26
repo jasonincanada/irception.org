@@ -224,6 +224,15 @@
                 .success(function (data) { });
         };
 
+        vm.unsetNSFW = function (urlID) {
+            $http
+                .post('/api/attr.ashx', {
+                    URLID: urlID,
+                    UnsetAttr: 'nsfw'
+                })
+                .success(function (data) { });
+        };
+
         return vm;
     });
     

@@ -27,6 +27,26 @@ namespace ircbot.Domain
         }
 
         /// <summary>
+        /// Unset the NSFW flag for the passed URL ID
+        /// </summary>
+        /// <param name="urlID"></param>
+        public void UnsetURLNSFW(int urlID)
+        {
+            var url = _context
+                .URLs
+                .Where(u => u.URLID == urlID)
+                .FirstOrDefault();
+
+            if (url == null)
+                return;
+
+            url.NSFW = false;
+
+            AddURLUpdateHistory(urlID);
+            SaveChanges();
+        }
+
+        /// <summary>
         /// Get the latest URLs for the given channenl
         /// </summary>
         /// <param name="channelID"></param>

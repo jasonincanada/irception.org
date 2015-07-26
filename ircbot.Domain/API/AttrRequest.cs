@@ -8,6 +8,7 @@ namespace ircbot.Domain
         {
             public int URLID { get; set; }
             public string SetAttr { get; set; }
+            public string UnsetAttr { get; set; }
         }
 
         public static AttrRequestParams GetAttrRequestParams(string requestBody)

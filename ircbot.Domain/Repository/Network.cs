@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ircbot.Domain
@@ -16,6 +17,6 @@ namespace ircbot.Domain
                 .Include("Servers")
                 .Include("Channels")
                 .ToList();
-        }
+        }        
     }
 }

@@ -69,8 +69,17 @@ tr.new-link td {
 .mod-action-nsfw {
   color: red;
 }
+.mod-action-unnsfw {
+  color: green;
+}
 .url-nsfw {
   font-weight: bold;
   color: red;
   font-size: 9pt;
+}
+span.mod-action {
+  display: none;
+}
+tr.channel-row:hover span.mod-action {
+  display: block;
 }

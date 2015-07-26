@@ -19,9 +19,11 @@ namespace ircbot.Web.api
                 var repo = new Repository();
 
                 API.AttrRequestParams requestParams = API.GetAttrRequestParams(GetRequestBody(context));
-                
+
                 if (requestParams.SetAttr == "nsfw")
                     repo.SetURLNSFW(requestParams.URLID);
+                else if (requestParams.UnsetAttr == "nsfw")
+                    repo.UnsetURLNSFW(requestParams.URLID);
 
                 json = JsonConvert.SerializeObject(new
                 {
