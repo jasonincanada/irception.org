@@ -23,26 +23,37 @@ namespace irception.Web.api
                 var requestParams = API.GetAuthRequestParams(requestBody);
                 var repo = new Repository();
 
-                // Create a new auth record for the user, give him the UID for the web
-                Auth auth = new Auth
+                if (repo.HaveAuth(requestParams.NetworkID, requestParams.Nick, requestParams.Username, requestParams.Host))
                 {
-                    FKNetworkID = requestParams.NetworkID,
-                    Nick = requestParams.Nick,
-                    Username = requestParams.Username,
-                    Host = requestParams.Host,
-                    SUID = Utils.Get32ByteUID(),
-                    DateIssued = DateTime.UtcNow
-                };
-
-                repo.AddAuth(auth);
-                repo.SaveChanges();
-
-                json = JsonConvert.SerializeObject(new
+                    json = JsonConvert.SerializeObject(new
+                    {
+                        success = true,
+                        alreadyAuthenticated = true
+                    });
+                }
+                else
                 {
-                    success = true,
-                    ID = auth.AuthID,
-                    SUID = auth.SUID
-                });
+                    // Create a new auth record for the user, give him the UID for the web
+                    Auth auth = new Auth
+                    {
+                        FKNetworkID = requestParams.NetworkID,
+                        Nick = requestParams.Nick,
+                        Username = requestParams.Username,
+                        Host = requestParams.Host,
+                        SUID = Utils.Get32ByteUID(),
+                        DateIssued = DateTime.UtcNow
+                    };
+
+                    repo.AddAuth(auth);
+                    repo.SaveChanges();
+
+                    json = JsonConvert.SerializeObject(new
+                    {
+                        success = true,
+                        ID = auth.AuthID,
+                        SUID = auth.SUID
+                    });
+                }
             }
             catch (Exception ex)
             {

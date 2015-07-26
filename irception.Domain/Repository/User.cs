@@ -84,7 +84,7 @@ namespace irception.Domain
 
             return token.TokenID;
         }
-        
+
         /// <summary>
         /// Add an Auth object to the database.  Does not call SaveChanges() on the context.
         /// </summary>
@@ -116,6 +116,25 @@ namespace irception.Domain
 
             auth.FKUserID = user.UserID;
             auth.DateAuthenticated = DateTime.UtcNow;
+        }
+
+        /// <summary>
+        /// Check whether this nick!user@host has already authenticated to this network
+        /// </summary>
+        /// <param name="networkID"></param>
+        /// <param name="nick"></param>
+        /// <param name="username"></param>
+        /// <param name="host"></param>
+        /// <returns></returns>
+        public bool HaveAuth(int networkID, string nick, string username, string host)
+        {
+            return _context
+                .Auths
+                .Any(a => a.FKNetworkID == networkID
+                            && a.Nick == nick
+                            && a.Username == username
+                            && a.Host == host
+                            && a.DateAuthenticated != null);
         }
     }
 }
