@@ -48,17 +48,15 @@
         return vm;
     });
 
-    app.controller('ConfigController', function ($http, $state) {
+    app.controller('ConfigController', function ($state, DataService) {
         var vm = this;
 
         vm.Networks = [];
 
-        $http
-	      .get('/api/config.ashx')
-	      .success(function (data) {
-	          vm.Networks = data.Networks;
-	      });
-
+        DataService.getConfig(function(data) {
+            vm.Networks = data.Networks;
+        });
+        
         vm.urlLink = function (network, channel) {
             $state.go('channel', {
                 networkSlug: network.Slug,
@@ -86,7 +84,7 @@
         return vm;
     });
 
-    app.controller('LoginController', function ($http, $state, $timeout, Session) {
+    app.controller('LoginController', function ($state, $timeout, Session, DataService) {
         var vm = this;
 
         vm.username = '';
@@ -107,26 +105,20 @@
                 return;
             }
 
-            $http
-                .post('/api/login.ashx', {
-                    Username: vm.username,
-                    Password: vm.password
-                })
-                .success(function (data) {
+            DataService.login(vm.username, vm.password, function (data) {
+                if (data.success) {
+                    Session.loggedIn(data);
 
-                    if (data.success) {
-                        Session.loggedIn(data);
+                    $state.go('channel', {
+                        channelSlug: 'dropnet',
+                        networkSlug: 'dr'
+                    });
 
-                        $state.go('channel', {
-                            channelSlug: 'dropnet',
-                            networkSlug: 'dr'
-                        });
-
-                        vm.error = undefined;
-                    } else {
-                        vm.error = data.UserMessage;
-                    }
-                });
+                    vm.error = undefined;
+                } else {
+                    vm.error = data.UserMessage;
+                }
+            });
         };
 
         $timeout(function () {
@@ -136,7 +128,7 @@
         return vm;
     });
     
-    app.controller('ChannelController', function ($http, $scope, $stateParams, $interval, dataService, UI, Session) {
+    app.controller('ChannelController', function ($scope, $stateParams, $interval, DataService, UI, Session) {
         var vm = this;
 
         vm.Channel = { ChannelName: '#' };
@@ -175,29 +167,26 @@
             });
         };
 
-        $http
-            .get('/api/chan.ashx?network=' + $stateParams.networkSlug + '&channel=' + $stateParams.channelSlug)
-            .success(function (data) {
-                vm.Channel = data.Channel;
-                vm.NetworkName = data.NetworkSlug;
-                vm.updateURLs(data.URLs);
-                vm.refreshElapsed(0);
+        DataService.getChannel($stateParams.networkSlug, $stateParams.channelSlug, function (data) {
+            vm.Channel = data.Channel;
+            vm.NetworkName = data.NetworkSlug;
+            vm.updateURLs(data.URLs);
+            vm.refreshElapsed(0);
 
-                UI.tabTitle(data.NetworkSlug + '/' + data.ChannelSlug + ' - irception.org')
+            UI.tabTitle(data.NetworkSlug + '/' + data.ChannelSlug + ' - irception.org')
 
-                vm.lastURLUpdateHistoryID = data.luuhid;
+            vm.lastURLUpdateHistoryID = data.luuhid;
 
-                onLogin();
-            })
+            onLogin();
+        });
 
         var interval = $interval(function () {
-            $http
-                .get('/api/chan.ashx?network=' + $stateParams.networkSlug + '&channel=' + $stateParams.channelSlug + '&luuhid=' + vm.lastURLUpdateHistoryID)
-                .success(function (data) {
-                    vm.updateURLs(data.URLs);
-                    vm.refreshElapsed(0);
-                    vm.lastURLUpdateHistoryID = data.luuhid;
-                })
+
+            DataService.getChannelFromLast($stateParams.networkSlug, $stateParams.channelSlug, vm.lastURLUpdateHistoryID, function (data) {
+                vm.updateURLs(data.URLs);
+                vm.refreshElapsed(0);
+                vm.lastURLUpdateHistoryID = data.luuhid;
+            });
 
             vm.refreshElapsed(5);
         }, 5000);
@@ -216,21 +205,11 @@
         $scope.$on('session.login', onLogin);
 
         vm.setNSFW = function (urlID) {
-            $http
-                .post('/api/attr.ashx', {
-                    URLID: urlID,
-                    SetAttr: 'nsfw'
-                })
-                .success(function (data) { });
+            DataService.setAttr(urlID, 'nsfw', function () { });            
         };
 
         vm.unsetNSFW = function (urlID) {
-            $http
-                .post('/api/attr.ashx', {
-                    URLID: urlID,
-                    UnsetAttr: 'nsfw'
-                })
-                .success(function (data) { });
+            DataService.unsetAttr(urlID, 'nsfw', function () { });
         };
 
         return vm;

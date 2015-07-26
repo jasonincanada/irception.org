@@ -74,6 +74,7 @@
     <None Include="css\irc.less" />
     <Content Include="app\app.controllers.js" />
     <Content Include="app\app.services.js" />
+    <Content Include="app\data.service.js" />
     <Content Include="css\irc.css" />
     <Content Include="img\favicon.png" />
     <Content Include="img\irception-white-bg.png" />

@@ -53,17 +53,4 @@
         return service;
     });
 
-    app.service('dataService', function ($http) {
-        var service = this;
-        var o = {
-            lastURLUpdateHistoryID: 0
-        };
-
-        service.getUpdatedURLs = function () {
-
-        };
-
-        return service;
-    });
-
 })();
