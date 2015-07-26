@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 
 namespace ircbot.Domain
 {
-    public class API
+    public partial class API
     {
         public class YouTubeThumbnail
         {
@@ -20,7 +19,7 @@ namespace ircbot.Domain
 
             public Dictionary<string, YouTubeThumbnail> thumbnails { get; set; }
         }
-        
+
         public class YouTubeItem
         {
             public string kind { get; set; }
@@ -53,40 +52,6 @@ namespace ircbot.Domain
         public static URLRequestParams GetURLRequestParams(string requestBody)
         {
             return JsonConvert.DeserializeObject<URLRequestParams>(requestBody);
-        }
-
-        public class SessionRequestParams
-        {
-            public string Nick { get; set; }
-            public string NickUserHost { get; set; }
-            public int ChannelID { get; set; }
-        }
-
-        public static SessionRequestParams GetSessionRequestParams(string requestBody)
-        {
-            return JsonConvert.DeserializeObject<SessionRequestParams>(requestBody);
-        }
-
-        public class LoginRequestParams
-        {
-            public string Username { get; set; }
-            public string Password { get; set; }
-        }
-
-        public static LoginRequestParams GetLoginRequestParams(string requestBody)
-        {
-            return JsonConvert.DeserializeObject<LoginRequestParams>(requestBody);
-        }
-
-        public class AttrRequestParams
-        {
-            public int URLID { get; set; }
-            public string SetAttr { get; set; }
-        }
-
-        public static AttrRequestParams GetAttrRequestParams(string requestBody)
-        {
-            return JsonConvert.DeserializeObject<AttrRequestParams>(requestBody);
         }
     }
 }

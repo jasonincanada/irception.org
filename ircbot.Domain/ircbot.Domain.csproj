@@ -52,6 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\AttrRequest.cs" />
+    <Compile Include="API\LoginRequest.cs" />
+    <Compile Include="API\SessionRequest.cs" />
+    <Compile Include="API\URLRequest.cs" />
     <Compile Include="Cache\ircCache.cs" />
     <Compile Include="Channel.cs">
       <DependentUpon>ircbotModel.tt</DependentUpon>
@@ -78,7 +82,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ircbotModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="API.cs" />
     <Compile Include="Line.cs">
       <DependentUpon>ircbotModel.tt</DependentUpon>
     </Compile>
