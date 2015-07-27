@@ -136,5 +136,161 @@ namespace irception.Domain
                             && a.Host == host
                             && a.DateAuthenticated != null);
         }
-    }
+
+        /// <summary>
+        /// Return a User object that previously authenticated under this nick/user/host
+        /// </summary>
+        /// <param name="nick"></param>
+        /// <param name="username"></param>
+        /// <param name="host"></param>
+        /// <returns></returns>
+        public User GetAuthenticatedUser(string nick, string username, string host)
+        {
+            var auth = _context
+                .Auths
+                .Where(a => a.DateAuthenticated != null
+                            && a.Nick == nick
+                            && a.Username == username
+                            && a.Host == host)
+                .OrderByDescending(a => a.AuthID)
+                .FirstOrDefault();
+
+            if (auth == null)
+                return null;
+
+            return auth.User;
+        }
+
+        /// <summary>
+        /// Create a new Invite object, save it to the table and return it.  If this nick!username@host already has an
+        /// invite, return the existing object.
+        /// </summary>
+        /// <param name="inviter"></param>
+        /// <param name="nick"></param>
+        /// <param name="username"></param>
+        /// <param name="host"></param>
+        /// <param name="channelID"></param>
+        /// <returns></returns>
+        public Invite GetOrCreateInvite(User inviter, string nick, string username, string host, int channelID)
+        {
+            var existing = _context
+                .Invites
+                .Where(i => i.Nick == nick && i.User == username && i.Host == host)
+                .FirstOrDefault();
+
+            if (existing != null)
+                return existing;
+
+            var invite = new Invite
+            {
+                FKChannelID = channelID,
+                DateInvited = DateTime.UtcNow,
+                FKUserIDInvitedBy = inviter.UserID,
+                Nick = nick,
+                User = username,
+                Host = host,
+                SUID = Utils.Get32ByteUID()
+            };
+
+            _context
+                .Invites
+                .Add(invite);
+
+            _context
+                .SaveChanges();
+
+            return invite;
+        }
+
+        /// <summary>
+        /// Get the nick associated with the passed invite SUID
+        /// </summary>
+        /// <param name="suid"></param>
+        /// <returns></returns>
+        public string GetInviteeNick(string suid)
+        {
+            var invite = _context
+                .Invites
+                .Where(i => i.SUID == suid)
+                .FirstOrDefault();
+
+            if (invite == null)
+                return "unknown";
+
+            return invite.Nick;
+        }
+
+        /// <summary>
+        /// Check if the passed username is available for a new account
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns>True if the username is available, ie, has not been used yet.</returns>
+        public bool UsernameAvailable(string username)
+        {
+            return false == _context
+                .Users
+                .Any(u => u.Username.ToLower() == username.ToLower());
+        }
+
+        /// <summary>
+        /// Accept an invitation and set up a new user account
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="suid">Invitation SUID</param>
+        /// <returns></returns>
+        public User Register(string username, string password, string suid)
+        {
+            Invite invite = GetInvite(suid);
+            User invitedby = invite.UserInvitedBy;
+            DateTime now = DateTime.UtcNow;
+
+            User user = new User
+            {
+                DateAdded = now,
+                FKUserIDInvitedBy = invite.FKUserIDInvitedBy,
+                InviteLevel = invitedby.InviteLevel + 1,
+                PasswordSHA256 = Utils.GetSHA256(password),
+                Username = username
+            };
+
+            _context
+                .Users
+                .Add(user);
+
+            invite.UserAcceptedBy = user;
+            invite.DateAccepted = now;
+
+            SaveChanges();
+
+            return user;
+        }
+
+        /// <summary>
+        /// Get an invite by its SUID
+        /// </summary>
+        /// <param name="suid"></param>
+        /// <returns></returns>
+        public Invite GetInvite(string suid)
+        {
+            return _context
+                .Invites
+                .Include("UserInvitedBy")
+                .Where(i => i.SUID == suid)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Return true if this invite has already been processed
+        /// </summary>
+        /// <param name="suid"></param>
+        /// <returns></returns>
+        public bool InviteAccepted(string suid)
+        {
+            return _context
+                .Invites
+                .Any(i => i.SUID == suid
+                            && i.DateAccepted != null);
+        }
+    }    
 }

@@ -40,6 +40,21 @@
           <Property Name="FKUserIDAddedBy" Type="int" Nullable="false" />
           <Property Name="DateRemoved" Type="datetime" />
         </EntityType>
+        <EntityType Name="Invite">
+          <Key>
+            <PropertyRef Name="InviteID" />
+          </Key>
+          <Property Name="InviteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FKUserIDInvitedBy" Type="int" Nullable="false" />
+          <Property Name="FKChannelID" Type="int" Nullable="false" />
+          <Property Name="DateInvited" Type="datetime" Nullable="false" />
+          <Property Name="SUID" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Nick" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="User" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Host" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="DateAccepted" Type="datetime" />
+          <Property Name="FKUserIDAcceptedBy" Type="int" />
+        </EntityType>
         <EntityType Name="Line">
           <Key>
             <PropertyRef Name="LineID" />
@@ -127,6 +142,8 @@
           <Property Name="DateDeleted" Type="datetime" />
           <Property Name="Username" Type="varchar" MaxLength="32" Nullable="false" />
           <Property Name="PasswordSHA256" Type="varchar" MaxLength="64" Nullable="false" />
+          <Property Name="FKUserIDInvitedBy" Type="int" />
+          <Property Name="InviteLevel" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Auth_FKNetworkID">
           <End Role="Network" Type="Self.Network" Multiplicity="0..1" />
@@ -185,6 +202,42 @@
             </Principal>
             <Dependent Role="Ignore">
               <PropertyRef Name="FKUserIDAddedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invite_FKChannelID">
+          <End Role="Channel" Type="Self.Channel" Multiplicity="1" />
+          <End Role="Invite" Type="Self.Invite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="Invite">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invite_FKUserIDAcceptedBy">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Invite" Type="Self.Invite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Invite">
+              <PropertyRef Name="FKUserIDAcceptedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invite_FKUserIDInvitedBy">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Invite" Type="Self.Invite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Invite">
+              <PropertyRef Name="FKUserIDInvitedBy" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -300,6 +353,7 @@
           <EntitySet Name="Auth" EntityType="Self.Auth" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Channel" EntityType="Self.Channel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ignore" EntityType="Self.Ignore" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Invite" EntityType="Self.Invite" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Line" EntityType="Self.Line" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Network" EntityType="Self.Network" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
@@ -327,6 +381,18 @@
           <AssociationSet Name="FK_Ignore_FKUserIDAddedBy" Association="Self.FK_Ignore_FKUserIDAddedBy">
             <End Role="User" EntitySet="User" />
             <End Role="Ignore" EntitySet="Ignore" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invite_FKChannelID" Association="Self.FK_Invite_FKChannelID">
+            <End Role="Channel" EntitySet="Channel" />
+            <End Role="Invite" EntitySet="Invite" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invite_FKUserIDAcceptedBy" Association="Self.FK_Invite_FKUserIDAcceptedBy">
+            <End Role="User" EntitySet="User" />
+            <End Role="Invite" EntitySet="Invite" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invite_FKUserIDInvitedBy" Association="Self.FK_Invite_FKUserIDInvitedBy">
+            <End Role="User" EntitySet="User" />
+            <End Role="Invite" EntitySet="Invite" />
           </AssociationSet>
           <AssociationSet Name="FK_Line_FKChannelID" Association="Self.FK_Line_FKChannelID">
             <End Role="Channel" EntitySet="Channel" />
@@ -381,6 +447,10 @@
           <NavigationProperty Name="Ignores" Relationship="ircbotModel.FK_Ignore_FKUserIDAddedBy" FromRole="User" ToRole="Ignore" />
           <NavigationProperty Name="Permissions" Relationship="ircbotModel.FK_Permission_FKUserID" FromRole="User" ToRole="Permission" />
           <NavigationProperty Name="Auths" Relationship="ircbotModel.FK_Auth_FKUserID" FromRole="User" ToRole="Auth" />
+          <Property Name="FKUserIDInvitedBy" Type="Int32" />
+          <Property Name="InviteLevel" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Invitees" Relationship="ircbotModel.FK_Invite_FKUserIDInvitedBy" FromRole="User" ToRole="Invite" />
+          <NavigationProperty Name="Invite" Relationship="ircbotModel.FK_Invite_FKUserIDAcceptedBy" FromRole="User" ToRole="Invite" />
         </EntityType>
         <EntityContainer Name="ircbotEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Users" EntityType="Self.User" />
@@ -449,6 +519,19 @@
           <AssociationSet Name="FK_Auth_FKUserID" Association="ircbotModel.FK_Auth_FKUserID">
             <End Role="User" EntitySet="Users" />
             <End Role="Auth" EntitySet="Auths" />
+          </AssociationSet>
+          <EntitySet Name="Invites" EntityType="ircbotModel.Invite" />
+          <AssociationSet Name="FK_Invite_FKChannelID" Association="ircbotModel.FK_Invite_FKChannelID">
+            <End Role="Channel" EntitySet="Channels" />
+            <End Role="Invite" EntitySet="Invites" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invite_FKUserIDInvitedBy" Association="ircbotModel.FK_Invite_FKUserIDInvitedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Invite" EntitySet="Invites" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invite_FKUserIDAcceptedBy" Association="ircbotModel.FK_Invite_FKUserIDAcceptedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Invite" EntitySet="Invites" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Network">
@@ -752,6 +835,60 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Invite">
+          <Key>
+            <PropertyRef Name="InviteID" />
+          </Key>
+          <Property Name="InviteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FKUserIDInvitedBy" Type="Int32" Nullable="false" />
+          <Property Name="FKChannelID" Type="Int32" Nullable="false" />
+          <Property Name="DateInvited" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SUID" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Nick" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="User" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Host" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Channel" Relationship="ircbotModel.FK_Invite_FKChannelID" FromRole="Invite" ToRole="Channel" />
+          <NavigationProperty Name="UserInvitedBy" Relationship="ircbotModel.FK_Invite_FKUserIDInvitedBy" FromRole="Invite" ToRole="User" />
+          <Property Name="DateAccepted" Type="DateTime" Precision="3" />
+          <Property Name="FKUserIDAcceptedBy" Type="Int32" />
+          <NavigationProperty Name="UserAcceptedBy" Relationship="ircbotModel.FK_Invite_FKUserIDAcceptedBy" FromRole="Invite" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Invite_FKChannelID">
+          <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="1" />
+          <End Type="ircbotModel.Invite" Role="Invite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="Invite">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invite_FKUserIDInvitedBy">
+          <End Type="ircbotModel.User" Role="User" Multiplicity="1" />
+          <End Type="ircbotModel.Invite" Role="Invite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Invite">
+              <PropertyRef Name="FKUserIDInvitedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invite_FKUserIDAcceptedBy">
+          <End Type="ircbotModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="ircbotModel.Invite" Role="Invite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Invite">
+              <PropertyRef Name="FKUserIDAcceptedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -761,6 +898,8 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="ircbotModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="InviteLevel" ColumnName="InviteLevel" />
+                <ScalarProperty Name="FKUserIDInvitedBy" ColumnName="FKUserIDInvitedBy" />
                 <ScalarProperty Name="PasswordSHA256" ColumnName="PasswordSHA256" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="DateDeleted" ColumnName="DateDeleted" />
@@ -892,6 +1031,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Invites">
+            <EntityTypeMapping TypeName="ircbotModel.Invite">
+              <MappingFragment StoreEntitySet="Invite">
+                <ScalarProperty Name="FKUserIDAcceptedBy" ColumnName="FKUserIDAcceptedBy" />
+                <ScalarProperty Name="DateAccepted" ColumnName="DateAccepted" />
+                <ScalarProperty Name="Host" ColumnName="Host" />
+                <ScalarProperty Name="User" ColumnName="User" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="SUID" ColumnName="SUID" />
+                <ScalarProperty Name="DateInvited" ColumnName="DateInvited" />
+                <ScalarProperty Name="FKChannelID" ColumnName="FKChannelID" />
+                <ScalarProperty Name="FKUserIDInvitedBy" ColumnName="FKUserIDInvitedBy" />
+                <ScalarProperty Name="InviteID" ColumnName="InviteID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -915,15 +1070,15 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram DiagramId="30d6ab88e69e4240b3852dc378367386" Name="Diagram1">
-        <EntityTypeShape EntityType="ircbotModel.User" Width="1.5" PointX="8.5" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Network" Width="1.5" PointX="2.5" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Server" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.User" Width="1.5" PointX="8.375" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Network" Width="1.5" PointX="2.375" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Server" Width="1.5" PointX="0.5" PointY="3.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.Channel" Width="1.5" PointX="4.375" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Line" Width="1.5" PointX="2.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Line" Width="1.5" PointX="2.375" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.URL" Width="1.5" PointX="4.375" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.URLUpdateHistory" Width="1.5" PointX="6.25" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.URLUpdateHistory" Width="1.5" PointX="6.375" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.Token" Width="1.5" PointX="10.375" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Ignore" Width="1.5" PointX="8.5" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Ignore" Width="1.5" PointX="8.75" PointY="6.625" IsExpanded="true" />
         <EntityTypeShape EntityType="ircbotModel.Permission" Width="1.5" PointX="6.375" PointY="1.25" IsExpanded="true" />
         <AssociationConnector Association="ircbotModel.FK_Server_FKNetworkID" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Channel_FKNetworkID" ManuallyRouted="false" />
@@ -937,9 +1092,13 @@
         <AssociationConnector Association="ircbotModel.FK_Permission_FKUserID" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Permission_FKUserIDGrantedBy" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Permission_FKUserIDRevokedBy" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="ircbotModel.Auth" Width="1.5" PointX="2.375" PointY="6.25" />
+        <EntityTypeShape EntityType="ircbotModel.Auth" Width="1.5" PointX="2.375" PointY="6.5" />
         <AssociationConnector Association="ircbotModel.FK_Auth_FKNetworkID" />
         <AssociationConnector Association="ircbotModel.FK_Auth_FKUserID" />
+        <EntityTypeShape EntityType="ircbotModel.Invite" Width="1.5" PointX="12.5" PointY="2.25" />
+        <AssociationConnector Association="ircbotModel.FK_Invite_FKChannelID" />
+        <AssociationConnector Association="ircbotModel.FK_Invite_FKUserIDInvitedBy" />
+        <AssociationConnector Association="ircbotModel.FK_Invite_FKUserIDAcceptedBy" />
       </Diagram>
     </Diagrams>
   </Designer>

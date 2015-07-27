@@ -19,6 +19,8 @@ namespace irception.Domain
             this.Ignores = new HashSet<Ignore>();
             this.Permissions = new HashSet<Permission>();
             this.Auths = new HashSet<Auth>();
+            this.Invitees = new HashSet<Invite>();
+            this.Invite = new HashSet<Invite>();
         }
     
         public int UserID { get; set; }
@@ -26,9 +28,13 @@ namespace irception.Domain
         public Nullable<System.DateTime> DateDeleted { get; set; }
         public string Username { get; set; }
         public string PasswordSHA256 { get; set; }
+        public Nullable<int> FKUserIDInvitedBy { get; set; }
+        public int InviteLevel { get; set; }
     
         public virtual ICollection<Ignore> Ignores { get; set; }
         public virtual ICollection<Permission> Permissions { get; set; }
         public virtual ICollection<Auth> Auths { get; set; }
+        public virtual ICollection<Invite> Invitees { get; set; }
+        public virtual ICollection<Invite> Invite { get; set; }
     }
 }

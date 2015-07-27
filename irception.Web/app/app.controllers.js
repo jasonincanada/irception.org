@@ -122,6 +122,80 @@
 
         return vm;
     });
+
+    app.controller('InviteController', function ($state, $stateParams, $timeout, Session, DataService) {
+        var vm = this;
+
+        vm.username = '';
+        vm.password = '';
+        vm.password2 = '';
+
+        DataService.getInviteeNick($stateParams.SUID, function (nick) {
+            if (vm.username == '') {
+                vm.username = nick;
+
+                $timeout(function () {
+                    $('#inputPassword').focus();
+                });
+            }
+        });
+
+        vm.register = function () {
+            if (vm.username.length == 0) {
+                $timeout(function () {
+                    $('#inputUsername').focus();
+                });
+                return;
+            }
+
+            if (vm.password.length == 0) {
+                $timeout(function () {
+                    $('#inputPassword').focus();
+                });
+                return;
+            }
+
+            if (vm.password2.length == 0) {
+                $timeout(function () {
+                    $('#inputPassword2').focus();
+                });
+                return;
+            }
+
+            if (vm.password2 != vm.password) {
+                $timeout(function () {
+                    $('#inputPassword2').focus();
+                });
+
+                vm.error = 'Password mismatch.';
+                return;
+            }
+
+            var params = {
+                Username: vm.username,
+                Password: vm.password,
+                SUID: $stateParams.SUID
+            };
+            
+            DataService.register(params, function (data) {
+                if (data.success) {
+                    Session.loggedIn(data);
+
+                    $state.go('me');
+                    
+                    vm.error = undefined;
+                } else {
+                    vm.error = 'Error: ' + data.UserMessage;
+                }
+            });
+        };
+
+        $timeout(function () {
+            $('#inputUsername').focus();
+        });
+
+        return vm;
+    });
     
     app.controller('ChannelController', function ($scope, $stateParams, $interval, DataService, UI, Session) {
         var vm = this;

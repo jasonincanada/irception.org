@@ -54,7 +54,10 @@
   <ItemGroup>
     <Compile Include="API\AttrRequest.cs" />
     <Compile Include="API\AuthRequest.cs" />
+    <Compile Include="API\InviteeNickRequest.cs" />
+    <Compile Include="API\InviteRequest.cs" />
     <Compile Include="API\LoginRequest.cs" />
+    <Compile Include="API\RegisterRequest.cs" />
     <Compile Include="API\URLRequest.cs" />
     <Compile Include="Auth.cs">
       <DependentUpon>ircbotModel.tt</DependentUpon>
@@ -68,6 +71,9 @@
     <Compile Include="DTO\PlainURL.cs" />
     <Compile Include="DTO\PlainUser.cs" />
     <Compile Include="Ignore.cs">
+      <DependentUpon>ircbotModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Invite.cs">
       <DependentUpon>ircbotModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ircbotModel.Context.cs">

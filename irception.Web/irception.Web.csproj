@@ -70,6 +70,9 @@
     <Content Include="api\login.ashx" />
     <Content Include="api\attr.ashx" />
     <Content Include="api\auth.ashx" />
+    <Content Include="api\invite.ashx" />
+    <Content Include="api\inviteeNick.ashx" />
+    <Content Include="api\register.ashx" />
     <None Include="css\irc.less" />
     <Content Include="app\app.controllers.js" />
     <Content Include="app\app.services.js" />
@@ -94,6 +97,7 @@
     <Content Include="templates\art.html" />
     <Content Include="templates\channel.html" />
     <Content Include="templates\config.html" />
+    <Content Include="templates\invite.html" />
     <Content Include="templates\login.html" />
     <Content Include="templates\me.html" />
     <Content Include="templates\welcome.html" />
@@ -112,11 +116,20 @@
     <Compile Include="api\config.ashx.cs">
       <DependentUpon>config.ashx</DependentUpon>
     </Compile>
+    <Compile Include="api\invite.ashx.cs">
+      <DependentUpon>invite.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="api\inviteeNick.ashx.cs">
+      <DependentUpon>inviteeNick.ashx</DependentUpon>
+    </Compile>
     <Compile Include="api\l.ashx.cs">
       <DependentUpon>l.ashx</DependentUpon>
     </Compile>
     <Compile Include="api\login.ashx.cs">
       <DependentUpon>login.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="api\register.ashx.cs">
+      <DependentUpon>register.ashx</DependentUpon>
     </Compile>
     <Compile Include="api\test.ashx.cs">
       <DependentUpon>test.ashx</DependentUpon>

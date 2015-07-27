@@ -48,6 +48,22 @@
                 .success(successFunc);
         };
 
+        service.getInviteeNick = function (SUID, successFunc) {
+            $http
+                .post('/api/inviteeNick.ashx', {
+                    SUID: SUID
+                })
+                .success(function (data) {
+                    successFunc(data.nick);
+                });
+        };
+
+        service.register = function (params, successFunc) {
+            $http
+                .post('/api/register.ashx', params)
+                .success(successFunc);
+        };
+
         return service;
     });
 

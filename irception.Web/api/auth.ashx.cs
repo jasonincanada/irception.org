@@ -1,9 +1,6 @@
 ﻿using irception.Domain;
-using irception.Web;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 
 namespace irception.Web.api
