@@ -1,4 +1,4 @@
-﻿
+﻿/*
 drop table FirstChannelVisit
 
 create table ChannelVisit (
@@ -48,3 +48,41 @@ alter table AutoNSFW
 add constraint FK_AutoNSFW_FKUserIDDeletedBy
 foreign key (FKUserIDDeletedBy)
 references [User](UserID)
+*/
+
+/*
+Lambda syntax: 
+
+public List<FirstChannelVisit> GetFirstChannelVisits(int userID)
+{
+    return _context
+        .ChannelVisits
+        .Where(cv => cv.FKUserID == userID)
+        .GroupBy(g => new
+        {
+            ChannelSlug = g.Channel.Slug,
+            NetworkSlug = g.Channel.Network.Slug
+        })
+        .Select(cv => new FirstChannelVisit
+        {
+            ChannelSlug = cv.Key.ChannelSlug,
+            NetworkSlug = cv.Key.NetworkSlug,
+            DateVisit = cv.Min(c => c.DateVisit)
+        })
+        .ToList();
+}
+
+T-SQL:
+
+SELECT
+	chan.Slug AS ChannelSlug,
+	net.Slug AS NetworkSlug,
+	MIN(cv.DateVisit) AS DateVisit
+FROM ChannelVisit cv
+	JOIN Channel chan ON chan.ChannelID = cv.FKChannelID
+	JOIN Network net ON net.NetworkID = chan.FKNetworkID
+WHERE cv.FKUserID = @userID
+GROUP BY
+	chan.Slug,
+	net.Slug
+*/
