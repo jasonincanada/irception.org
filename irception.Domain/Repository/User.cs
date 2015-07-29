@@ -292,5 +292,29 @@ namespace irception.Domain
                 .Any(i => i.SUID == suid
                             && i.DateAccepted != null);
         }
+
+        /// <summary>
+        /// Get a list of channels this user has visited
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <returns></returns>
+        public List<FirstChannelVisit> GetFirstChannelVisits(int userID)
+        {
+            return _context
+                .ChannelVisits
+                .Where(cv => cv.FKUserID == userID)
+                .GroupBy(g => new
+                {
+                    ChannelSlug = g.Channel.Slug,
+                    NetworkSlug = g.Channel.Network.Slug
+                })
+                .Select(cv => new FirstChannelVisit
+                {
+                    ChannelSlug = cv.Key.ChannelSlug,
+                    NetworkSlug = cv.Key.NetworkSlug,
+                    DateVisit = cv.Min(c => c.DateVisit)
+                })
+                .ToList();
+        }
     }    
 }

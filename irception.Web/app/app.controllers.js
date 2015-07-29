@@ -47,8 +47,12 @@
         return vm;
     });
 
-    app.controller('MeController', function ($state, Session) {
+    app.controller('MeController', function ($state, Session, DataService) {
         var vm = this;
+
+        if (Session.UserID == 0) {
+            $state.go('login');
+        }
 
         vm.Session = Session;
 
@@ -60,7 +64,7 @@
         vm.login = function () {
             $state.go('login');
         };
-
+        
         return vm;
     });
 
@@ -97,19 +101,8 @@
 
             DataService.login(params, function (data) {
                 if (data.success) {
-                    Session.loggedIn(data);
-
-                    // If we've just authenticated via IRC PM, go to 'me' state
-                    if ($state.current.name == 'auth') {
-                        $state.go('me');
-                    } else {
-                        $state.go('channel', {
-                            channelSlug: 'dropnet',
-                            networkSlug: 'dr'
-                        });
-                    }
-
-                    vm.error = undefined;
+                    Session.loggedIn(data);                                        
+                    $state.go('me');                    
                 } else {
                     vm.error = data.UserMessage;
                 }
@@ -196,6 +189,43 @@
 
         return vm;
     });
+
+      
+    app.controller('ModController', function ($scope, $state, $stateParams, $interval, DataService, UI, Session) {
+        var vm = this;
+
+        vm.autoNSFW = [];
+        vm.ignores = [];
+        
+        DataService.getChannel($stateParams.networkSlug, $stateParams.channelSlug, function (data) {
+            vm.Channel = data.Channel;
+            vm.NetworkSlug = data.NetworkSlug;
+            vm.ChannelSlug = vm.Channel.Slug;
+            
+            UI.tabTitle(data.NetworkSlug + '/' + data.ChannelSlug + ' - irception.org')
+
+            var channelID = vm.Channel.ChannelID;
+
+            DataService.getChannelModData(channelID, function (data) {
+                vm.autoNSFW = data.autoNSFW;
+                vm.ignores = data.ignores;
+            });
+        });
+
+        function toBeImplemented() {
+            window.alert('In production, you will need to be a mod to see this page and click this link.');
+        }
+
+        vm.deleteFragment = function(autonsfw) {
+            toBeImplemented();
+        }
+
+        vm.deleteNick = function (nick) {
+            toBeImplemented();
+        }
+        
+        return vm;
+    });
     
     app.controller('ChannelController', function ($scope, $stateParams, $interval, DataService, UI, Session) {
         var vm = this;
@@ -238,7 +268,8 @@
 
         DataService.getChannel($stateParams.networkSlug, $stateParams.channelSlug, function (data) {
             vm.Channel = data.Channel;
-            vm.NetworkName = data.NetworkSlug;
+            vm.ChannelSlug = data.Channel.Slug;
+            vm.NetworkSlug = data.NetworkSlug;
             vm.updateURLs(data.URLs);
             vm.refreshElapsed(0);
 

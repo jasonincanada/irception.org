@@ -1,23 +1,33 @@
 ﻿
-<div class="container">
+<div class="container irception">
     <div class="row">
                 
-        <div class="col-md-12">
+        <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
             
-            <table class="table table-hover link-table" style="margin-top: 30px;">
+            <table class="table table-hover link-table">
                 <thead>
                     <tr>
-                        <th style="width: 90px;">&nbsp;</th>
-                        <th style="width: 120px;">&nbsp;</th>
-                        <th style="padding: 0px 0px 0px 8px;"><span class="channel-name-header"><small>{{ vm.NetworkName }} / </small> {{ vm.Channel.Slug }}</span></th>
-                        <th ng-if="vm.Permission.attr"></th>
+                        <th style="width: 90px;"></th>
+                        <th></th>
+                        <th class="url-row-padding" colspan="2">
+                            <span class="crumbs">                                
+                                / {{ vm.NetworkSlug }}
+                                / {{ vm.Channel.Slug }}
+
+                                <span class="pull-right">
+                                    <a ui-sref="mod({ networkSlug: vm.NetworkSlug, channelSlug: vm.ChannelSlug })">
+                                        / mod
+                                    </a>
+                                </span>
+                            </span>                            
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="url in vm.URLs | orderBy: '-AtTicks' " ng-class="{ 'new-link': url.SecondsElapsed < 3600 }" class="channel-row">
                         <td class="text-center"><span class="elapsed">{{ url.ElapsedString }}</span></td>
-                        <td>{{ url.Nick }}</td>
-                        <td>
+                        <td class="text-center nick-column-width">{{ url.Nick }}</td>
+                        <td class="url-row-padding">
                             <div ng-if="url.Type == null">
                                 <span ng-show="url.NSFW" class="url-nsfw">NSFW</span>
                                 <a href="" ng-href="{{ url.URL }}" target="_blank">{{ url.URL }}</a>                                

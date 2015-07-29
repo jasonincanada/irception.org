@@ -16,6 +16,7 @@
             service.Permissions = data.User.Permissions;
             service.Token = data.Token.Token;
             service.IP = data.Token.IP;
+            service.ChannelsVisited = data.ChannelsVisited;
 
             $rootScope.$broadcast('session.login');
         };

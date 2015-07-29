@@ -1,0 +1,53 @@
+﻿
+<div class="container irception">
+    
+    <span class="crumbs">
+        / mod     
+        / {{ vm.NetworkSlug }}
+        <a href="" ui-sref="channel({ networkSlug: vm.NetworkSlug, channelSlug: vm.ChannelSlug })">
+            / {{ vm.ChannelSlug }}
+        </a>
+    </span>
+
+    <hr class="hr-grid-top" />
+
+    <div class="row mod-section-row">
+        <div class="col-md-3 mod-section">Auto-NSFW</div>
+        
+        <div class="col-md-9 mod-section-contents">
+            <p>If any of these words is found in a URL, the URL is automatically marked NSFW.</p>
+
+            <ul>
+                <li ng-repeat="autonsfw in vm.autoNSFW">
+                    
+                    {{ autonsfw.Fragment }}
+
+                    <span class="mod-links">
+                        <span class="mod-link"><a href="" class="red-link" ng-click="vm.deleteFragment(autonsfw)">delete</a></span>
+                    </span>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+
+    <div class="row mod-section-row">
+        <div class="col-md-3 mod-section">Ignore List</div>
+
+        <div class="col-md-9 mod-section-contents">
+            <p>URLs from these nicks will be ignored.</p>
+
+            <ul>
+                <li ng-repeat="nick in vm.ignores track by $index">
+
+                    {{ nick.Nick }} <span style="color: #BBB;">by </span> {{ nick.AddedBy }}
+
+                    <span class="mod-links">
+                        <span class="mod-link"><a href="" class="red-link" ng-click="vm.deleteNick(nick)">delete</a></span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -37,5 +37,7 @@ namespace irception.Domain
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Auth> Auths { get; set; }
         public DbSet<Invite> Invites { get; set; }
+        public DbSet<AutoNSFW> AutoNSFWs { get; set; }
+        public DbSet<ChannelVisit> ChannelVisits { get; set; }
     }
 }

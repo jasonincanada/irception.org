@@ -45,6 +45,11 @@
                 templateUrl: 'templates/channel.html',
                 controller: 'ChannelController as vm'
             })
+            .state('mod', {                
+                url: '/mod/{networkSlug:[a-z]{1,2}}/{channelSlug:[a-zA-Z0-9]{1,20}}',
+                templateUrl: 'templates/mod.html',
+                controller: 'ModController as vm'
+            })
 	        .state('art', {
     	        url: '/art',
 	            templateUrl: 'templates/art.html',

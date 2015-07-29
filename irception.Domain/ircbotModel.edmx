@@ -19,6 +19,18 @@
           <Property Name="SUID" Type="varchar" MaxLength="32" />
           <Property Name="DateAuthenticated" Type="datetime" />
         </EntityType>
+        <EntityType Name="AutoNSFW">
+          <Key>
+            <PropertyRef Name="AutoNSFWID" />
+          </Key>
+          <Property Name="AutoNSFWID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FKChannelID" Type="int" Nullable="false" />
+          <Property Name="DateAdded" Type="datetime" Nullable="false" />
+          <Property Name="DateDeleted" Type="datetime" />
+          <Property Name="FKUserIDAddedBy" Type="int" Nullable="false" />
+          <Property Name="FKUserIDDeletedBy" Type="int" />
+          <Property Name="Fragment" Type="varchar" MaxLength="80" Nullable="false" />
+        </EntityType>
         <EntityType Name="Channel">
           <Key>
             <PropertyRef Name="ChannelID" />
@@ -28,6 +40,16 @@
           <Property Name="ChannelName" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="InChannel" Type="bit" Nullable="false" />
           <Property Name="Slug" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="ChannelVisit">
+          <Key>
+            <PropertyRef Name="FKUserID" />
+            <PropertyRef Name="FKChannelID" />
+            <PropertyRef Name="DateVisit" />
+          </Key>
+          <Property Name="FKUserID" Type="int" Nullable="false" />
+          <Property Name="FKChannelID" Type="int" Nullable="false" />
+          <Property Name="DateVisit" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Ignore">
           <Key>
@@ -169,6 +191,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_AutoNSFW_FKChannelID">
+          <End Role="Channel" Type="Self.Channel" Multiplicity="1" />
+          <End Role="AutoNSFW" Type="Self.AutoNSFW" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="AutoNSFW">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AutoNSFW_FKUserIDAddedBy">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="AutoNSFW" Type="Self.AutoNSFW" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AutoNSFW">
+              <PropertyRef Name="FKUserIDAddedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AutoNSFW_FKUserIDDeletedBy">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="AutoNSFW" Type="Self.AutoNSFW" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AutoNSFW">
+              <PropertyRef Name="FKUserIDDeletedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Channel_FKNetworkID">
           <End Role="Network" Type="Self.Network" Multiplicity="1" />
           <End Role="Channel" Type="Self.Channel" Multiplicity="*" />
@@ -178,6 +236,30 @@
             </Principal>
             <Dependent Role="Channel">
               <PropertyRef Name="FKNetworkID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ChannelVisit_FKChannelID">
+          <End Role="Channel" Type="Self.Channel" Multiplicity="1" />
+          <End Role="ChannelVisit" Type="Self.ChannelVisit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="ChannelVisit">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ChannelVisit_FKUserID">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="ChannelVisit" Type="Self.ChannelVisit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ChannelVisit">
+              <PropertyRef Name="FKUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -351,7 +433,9 @@
         </Association>
         <EntityContainer Name="ircbotModelStoreContainer">
           <EntitySet Name="Auth" EntityType="Self.Auth" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AutoNSFW" EntityType="Self.AutoNSFW" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Channel" EntityType="Self.Channel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ChannelVisit" EntityType="Self.ChannelVisit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ignore" EntityType="Self.Ignore" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Invite" EntityType="Self.Invite" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Line" EntityType="Self.Line" Schema="dbo" store:Type="Tables" />
@@ -370,9 +454,29 @@
             <End Role="User" EntitySet="User" />
             <End Role="Auth" EntitySet="Auth" />
           </AssociationSet>
+          <AssociationSet Name="FK_AutoNSFW_FKChannelID" Association="Self.FK_AutoNSFW_FKChannelID">
+            <End Role="Channel" EntitySet="Channel" />
+            <End Role="AutoNSFW" EntitySet="AutoNSFW" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AutoNSFW_FKUserIDAddedBy" Association="Self.FK_AutoNSFW_FKUserIDAddedBy">
+            <End Role="User" EntitySet="User" />
+            <End Role="AutoNSFW" EntitySet="AutoNSFW" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AutoNSFW_FKUserIDDeletedBy" Association="Self.FK_AutoNSFW_FKUserIDDeletedBy">
+            <End Role="User" EntitySet="User" />
+            <End Role="AutoNSFW" EntitySet="AutoNSFW" />
+          </AssociationSet>
           <AssociationSet Name="FK_Channel_FKNetworkID" Association="Self.FK_Channel_FKNetworkID">
             <End Role="Network" EntitySet="Network" />
             <End Role="Channel" EntitySet="Channel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChannelVisit_FKChannelID" Association="Self.FK_ChannelVisit_FKChannelID">
+            <End Role="Channel" EntitySet="Channel" />
+            <End Role="ChannelVisit" EntitySet="ChannelVisit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChannelVisit_FKUserID" Association="Self.FK_ChannelVisit_FKUserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="ChannelVisit" EntitySet="ChannelVisit" />
           </AssociationSet>
           <AssociationSet Name="FK_Ignore_FKChannelID" Association="Self.FK_Ignore_FKChannelID">
             <End Role="Channel" EntitySet="Channel" />
@@ -451,6 +555,7 @@
           <Property Name="InviteLevel" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Invitees" Relationship="ircbotModel.FK_Invite_FKUserIDInvitedBy" FromRole="User" ToRole="Invite" />
           <NavigationProperty Name="Invite" Relationship="ircbotModel.FK_Invite_FKUserIDAcceptedBy" FromRole="User" ToRole="Invite" />
+          <NavigationProperty Name="ChannelVisits" Relationship="ircbotModel.FK_ChannelVisit_FKUserID" FromRole="User" ToRole="ChannelVisit" />
         </EntityType>
         <EntityContainer Name="ircbotEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Users" EntityType="Self.User" />
@@ -533,6 +638,28 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Invite" EntitySet="Invites" />
           </AssociationSet>
+          <EntitySet Name="AutoNSFWs" EntityType="ircbotModel.AutoNSFW" />
+          <AssociationSet Name="FK_AutoNSFW_FKChannelID" Association="ircbotModel.FK_AutoNSFW_FKChannelID">
+            <End Role="Channel" EntitySet="Channels" />
+            <End Role="AutoNSFW" EntitySet="AutoNSFWs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AutoNSFW_FKUserIDAddedBy" Association="ircbotModel.FK_AutoNSFW_FKUserIDAddedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="AutoNSFW" EntitySet="AutoNSFWs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AutoNSFW_FKUserIDDeletedBy" Association="ircbotModel.FK_AutoNSFW_FKUserIDDeletedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="AutoNSFW" EntitySet="AutoNSFWs" />
+          </AssociationSet>
+          <EntitySet Name="ChannelVisits" EntityType="ircbotModel.ChannelVisit" />
+          <AssociationSet Name="FK_ChannelVisit_FKChannelID" Association="ircbotModel.FK_ChannelVisit_FKChannelID">
+            <End Role="Channel" EntitySet="Channels" />
+            <End Role="ChannelVisit" EntitySet="ChannelVisits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ChannelVisit_FKUserID" Association="ircbotModel.FK_ChannelVisit_FKUserID">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ChannelVisit" EntitySet="ChannelVisits" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Network">
           <Key>
@@ -582,6 +709,7 @@
           <Property Name="Slug" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Ignores" Relationship="ircbotModel.FK_Ignore_FKChannelID" FromRole="Channel" ToRole="Ignore" />
           <NavigationProperty Name="Permissions" Relationship="ircbotModel.FK_Permission_FKChannelID" FromRole="Channel" ToRole="Permission" />
+          <NavigationProperty Name="AutoNSFWs" Relationship="ircbotModel.FK_AutoNSFW_FKChannelID" FromRole="Channel" ToRole="AutoNSFW" />
         </EntityType>
         <Association Name="FK_Channel_FKNetworkID">
           <End Type="ircbotModel.Network" Role="Network" Multiplicity="1" />
@@ -889,6 +1017,92 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AutoNSFW">
+          <Key>
+            <PropertyRef Name="AutoNSFWID" />
+          </Key>
+          <Property Name="AutoNSFWID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FKChannelID" Type="Int32" Nullable="false" />
+          <Property Name="DateAdded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateDeleted" Type="DateTime" Precision="3" />
+          <Property Name="FKUserIDAddedBy" Type="Int32" Nullable="false" />
+          <Property Name="FKUserIDDeletedBy" Type="Int32" />
+          <Property Name="Fragment" Type="String" Nullable="false" MaxLength="80" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Channel" Relationship="ircbotModel.FK_AutoNSFW_FKChannelID" FromRole="AutoNSFW" ToRole="Channel" />
+          <NavigationProperty Name="UserAddedBy" Relationship="ircbotModel.FK_AutoNSFW_FKUserIDAddedBy" FromRole="AutoNSFW" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_AutoNSFW_FKChannelID">
+          <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="1" />
+          <End Type="ircbotModel.AutoNSFW" Role="AutoNSFW" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="AutoNSFW">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AutoNSFW_FKUserIDAddedBy">
+          <End Type="ircbotModel.User" Role="User" Multiplicity="1" />
+          <End Type="ircbotModel.AutoNSFW" Role="AutoNSFW" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AutoNSFW">
+              <PropertyRef Name="FKUserIDAddedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AutoNSFW_FKUserIDDeletedBy">
+          <End Type="ircbotModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="ircbotModel.AutoNSFW" Role="AutoNSFW" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="AutoNSFW">
+              <PropertyRef Name="FKUserIDDeletedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ChannelVisit">
+          <Key>
+            <PropertyRef Name="FKUserID" />
+            <PropertyRef Name="FKChannelID" />
+            <PropertyRef Name="DateVisit" />
+          </Key>
+          <Property Name="FKUserID" Type="Int32" Nullable="false" />
+          <Property Name="FKChannelID" Type="Int32" Nullable="false" />
+          <Property Name="DateVisit" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Channel" Relationship="ircbotModel.FK_ChannelVisit_FKChannelID" FromRole="ChannelVisit" ToRole="Channel" />
+          <NavigationProperty Name="User" Relationship="ircbotModel.FK_ChannelVisit_FKUserID" FromRole="ChannelVisit" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_ChannelVisit_FKChannelID">
+          <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="1" />
+          <End Type="ircbotModel.ChannelVisit" Role="ChannelVisit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="ChannelVisit">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ChannelVisit_FKUserID">
+          <End Type="ircbotModel.User" Role="User" Multiplicity="1" />
+          <End Type="ircbotModel.ChannelVisit" Role="ChannelVisit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ChannelVisit">
+              <PropertyRef Name="FKUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1047,6 +1261,28 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AutoNSFWs">
+            <EntityTypeMapping TypeName="ircbotModel.AutoNSFW">
+              <MappingFragment StoreEntitySet="AutoNSFW">
+                <ScalarProperty Name="Fragment" ColumnName="Fragment" />
+                <ScalarProperty Name="FKUserIDDeletedBy" ColumnName="FKUserIDDeletedBy" />
+                <ScalarProperty Name="FKUserIDAddedBy" ColumnName="FKUserIDAddedBy" />
+                <ScalarProperty Name="DateDeleted" ColumnName="DateDeleted" />
+                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+                <ScalarProperty Name="FKChannelID" ColumnName="FKChannelID" />
+                <ScalarProperty Name="AutoNSFWID" ColumnName="AutoNSFWID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ChannelVisits">
+            <EntityTypeMapping TypeName="ircbotModel.ChannelVisit">
+              <MappingFragment StoreEntitySet="ChannelVisit">
+                <ScalarProperty Name="DateVisit" ColumnName="DateVisit" />
+                <ScalarProperty Name="FKChannelID" ColumnName="FKChannelID" />
+                <ScalarProperty Name="FKUserID" ColumnName="FKUserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1069,17 +1305,17 @@
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
-      <Diagram DiagramId="30d6ab88e69e4240b3852dc378367386" Name="Diagram1">
-        <EntityTypeShape EntityType="ircbotModel.User" Width="1.5" PointX="8.375" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Network" Width="1.5" PointX="2.375" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Server" Width="1.5" PointX="0.5" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Channel" Width="1.5" PointX="4.375" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Line" Width="1.5" PointX="2.375" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.URL" Width="1.5" PointX="4.375" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.URLUpdateHistory" Width="1.5" PointX="6.375" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Token" Width="1.5" PointX="10.375" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Ignore" Width="1.5" PointX="8.75" PointY="6.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="ircbotModel.Permission" Width="1.5" PointX="6.375" PointY="1.25" IsExpanded="true" />
+      <Diagram DiagramId="30d6ab88e69e4240b3852dc378367386" Name="Diagram1" ZoomLevel="86">
+        <EntityTypeShape EntityType="ircbotModel.User" Width="1.5" PointX="8.5" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Network" Width="1.5" PointX="2.5" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Server" Width="1.5" PointX="0.625" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Channel" Width="1.5" PointX="4.5" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Line" Width="1.5" PointX="2.5" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.URL" Width="1.5" PointX="4.5" PointY="6.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.URLUpdateHistory" Width="1.5" PointX="6.5" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Token" Width="1.5" PointX="10.5" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Ignore" Width="1.5" PointX="8.875" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ircbotModel.Permission" Width="1.5" PointX="6.5" PointY="3.75" IsExpanded="true" />
         <AssociationConnector Association="ircbotModel.FK_Server_FKNetworkID" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Channel_FKNetworkID" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Line_FKChannelID" ManuallyRouted="false" />
@@ -1092,13 +1328,20 @@
         <AssociationConnector Association="ircbotModel.FK_Permission_FKUserID" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Permission_FKUserIDGrantedBy" ManuallyRouted="false" />
         <AssociationConnector Association="ircbotModel.FK_Permission_FKUserIDRevokedBy" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="ircbotModel.Auth" Width="1.5" PointX="2.375" PointY="6.5" />
+        <EntityTypeShape EntityType="ircbotModel.Auth" Width="1.5" PointX="2.5" PointY="9" />
         <AssociationConnector Association="ircbotModel.FK_Auth_FKNetworkID" />
         <AssociationConnector Association="ircbotModel.FK_Auth_FKUserID" />
-        <EntityTypeShape EntityType="ircbotModel.Invite" Width="1.5" PointX="12.5" PointY="2.25" />
+        <EntityTypeShape EntityType="ircbotModel.Invite" Width="1.5" PointX="12.625" PointY="4.75" />
         <AssociationConnector Association="ircbotModel.FK_Invite_FKChannelID" />
         <AssociationConnector Association="ircbotModel.FK_Invite_FKUserIDInvitedBy" />
         <AssociationConnector Association="ircbotModel.FK_Invite_FKUserIDAcceptedBy" />
+        <EntityTypeShape EntityType="ircbotModel.AutoNSFW" Width="1.5" PointX="6.5" PointY="10.625" />
+        <AssociationConnector Association="ircbotModel.FK_AutoNSFW_FKChannelID" />
+        <AssociationConnector Association="ircbotModel.FK_AutoNSFW_FKUserIDAddedBy" />
+        <AssociationConnector Association="ircbotModel.FK_AutoNSFW_FKUserIDDeletedBy" />
+        <EntityTypeShape EntityType="ircbotModel.ChannelVisit" Width="1.5" PointX="8.5" PointY="0.875" />
+        <AssociationConnector Association="ircbotModel.FK_ChannelVisit_FKChannelID" />
+        <AssociationConnector Association="ircbotModel.FK_ChannelVisit_FKUserID" />
       </Diagram>
     </Diagrams>
   </Designer>

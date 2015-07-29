@@ -20,6 +20,7 @@ namespace irception.Domain
             this.URLs = new HashSet<URL>();
             this.Ignores = new HashSet<Ignore>();
             this.Permissions = new HashSet<Permission>();
+            this.AutoNSFWs = new HashSet<AutoNSFW>();
         }
     
         public int ChannelID { get; set; }
@@ -33,5 +34,6 @@ namespace irception.Domain
         public virtual ICollection<URL> URLs { get; set; }
         public virtual ICollection<Ignore> Ignores { get; set; }
         public virtual ICollection<Permission> Permissions { get; set; }
+        public virtual ICollection<AutoNSFW> AutoNSFWs { get; set; }
     }
 }

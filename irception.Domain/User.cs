@@ -21,6 +21,7 @@ namespace irception.Domain
             this.Auths = new HashSet<Auth>();
             this.Invitees = new HashSet<Invite>();
             this.Invite = new HashSet<Invite>();
+            this.ChannelVisits = new HashSet<ChannelVisit>();
         }
     
         public int UserID { get; set; }
@@ -36,5 +37,6 @@ namespace irception.Domain
         public virtual ICollection<Auth> Auths { get; set; }
         public virtual ICollection<Invite> Invitees { get; set; }
         public virtual ICollection<Invite> Invite { get; set; }
+        public virtual ICollection<ChannelVisit> ChannelVisits { get; set; }
     }
 }

@@ -73,6 +73,7 @@
     <Content Include="api\invite.ashx" />
     <Content Include="api\inviteeNick.ashx" />
     <Content Include="api\register.ashx" />
+    <Content Include="api\chanModData.ashx" />
     <None Include="css\irc.less" />
     <Content Include="app\app.controllers.js" />
     <Content Include="app\app.services.js" />
@@ -100,6 +101,7 @@
     <Content Include="templates\invite.html" />
     <Content Include="templates\login.html" />
     <Content Include="templates\me.html" />
+    <Content Include="templates\mod.html" />
     <Content Include="templates\welcome.html" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -112,6 +114,9 @@
     </Compile>
     <Compile Include="api\chan.ashx.cs">
       <DependentUpon>chan.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="api\chanModData.ashx.cs">
+      <DependentUpon>chanModData.ashx</DependentUpon>
     </Compile>
     <Compile Include="api\config.ashx.cs">
       <DependentUpon>config.ashx</DependentUpon>

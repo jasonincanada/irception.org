@@ -30,6 +30,12 @@
                 .success(successFunc);
         };
 
+        service.getChannelModData = function (channelID, successFunc) {
+            $http
+                .get('/api/chanModData.ashx?id=' + channelID)
+                .success(successFunc);
+        };
+
         service.setAttr = function (urlID, attr, successFunc) {
             $http
                 .post('/api/attr.ashx', {

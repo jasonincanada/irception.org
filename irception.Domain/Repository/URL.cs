@@ -46,6 +46,14 @@ namespace irception.Domain
             SaveChanges();
         }
 
+        public List<Ignore> GetIgnores(int channelID)
+        {
+            return _context
+                .Ignores
+                .Where(i => i.FKChannelID == channelID && i.DateRemoved == null)
+                .ToList();
+        }
+
         /// <summary>
         /// Get the latest URLs for the given channenl
         /// </summary>

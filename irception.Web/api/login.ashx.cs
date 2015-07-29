@@ -1,7 +1,9 @@
 ﻿using irception.Domain;
 using irception.Domain.DTO;
 using Newtonsoft.Json;
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Web;
 
 namespace irception.Web.api
@@ -32,12 +34,19 @@ namespace irception.Web.api
                         repo.MatchUserToAuthToken(user, requestParams.SUID);
                         repo.SaveChanges();
                     }
-                    
+
+                    List<FirstChannelVisit> channelsVisited = repo.GetFirstChannelVisits(user.UserID);
+
+                    // TODO: Merge this up
+                    foreach (var chan in channelsVisited)
+                        chan.DateVisitDisplay = chan.DateVisit.ToString();
+                                        
                     json = JsonConvert.SerializeObject(new
                     {
                         success = true,
                         User = PlainUser.FromModel(user),
-                        Token = PlainToken.FromModel(token)
+                        Token = PlainToken.FromModel(token),
+                        ChannelsVisited = channelsVisited
                     });
                 }
                 else
