@@ -41,7 +41,9 @@
             <ul>
                 <li ng-repeat="nick in vm.ignores track by $index">
 
-                    {{ nick.Nick }} <span style="color: #BBB;">by </span> {{ nick.AddedBy }}
+                    {{ nick.Nick }} 
+                    <span style="color: #BBB;">by</span> 
+                    <irception-user user="nick.UserAddedBy"></irception-user>
 
                     <span class="mod-links">
                         <span class="mod-link"><a href="" class="red-link" ng-click="vm.deleteNick(nick)">delete</a></span>

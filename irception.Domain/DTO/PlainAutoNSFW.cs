@@ -1,20 +1,22 @@
-﻿namespace irception.Domain
+﻿using irception.Domain.DTO;
+
+namespace irception.Domain
 {
     public class PlainIgnore
     {
         public string Nick { get; set; }
-        public string AddedBy { get; set; }
+        public PlainUser UserAddedBy { get; set; }
 
         public static PlainIgnore FromModel(Ignore i)
         {
             return new PlainIgnore
             {
                 Nick = i.Nick,
-                AddedBy = i.User.Username
+                UserAddedBy = PlainUser.FromModel(i.User)
             };
         }
     }
-
+    
     public class PlainAutoNSFW
     {
         public int AutoNSFWID { get; private set; }

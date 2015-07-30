@@ -32,7 +32,7 @@
 
         service.getChannelModData = function (channelID, successFunc) {
             $http
-                .get('/api/chanModData.ashx?id=' + channelID)
+                .get('/api/mod.ashx?id=' + channelID)
                 .success(successFunc);
         };
 

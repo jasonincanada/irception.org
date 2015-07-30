@@ -7,23 +7,17 @@
         var vm = this;
 
         vm.Session = Session;
-
-        vm.goLogin = function () {
-            $state.go('login');
-        };
-
-        vm.goUser = function () {
-            $state.go('me')
-        }
-
+        
         return vm;
     });
 
-    app.controller('ArtController', function ($state, Session) {
+    app.controller('UserController', function ($state, $stateParams, Session) {
         var vm = this;
 
         vm.Session = Session;
-        vm.art = "hlaoe bulaocheu aloeuh";
+        vm.Username = $stateParams.Username;
+
+        // fetch user info...
 
         return vm;
     });
@@ -54,7 +48,7 @@
             $state.go('login');
         }
 
-        vm.Session = Session;
+        vm.Session = Session;        
 
         vm.logout = function () {
             Session.reset();

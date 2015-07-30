@@ -39,21 +39,21 @@
                 url: '/invite/{SUID:[a-fA-F0-9]{32}}',
                 templateUrl: 'templates/invite.html',
                 controller: 'InviteController as vm'
-            })
-            .state('channel', {
-                url: '/{networkSlug:[a-z]{1,2}}/{channelSlug:[a-zA-Z0-9]{1,20}}',
-                templateUrl: 'templates/channel.html',
-                controller: 'ChannelController as vm'
-            })
+            })            
             .state('mod', {                
                 url: '/mod/{networkSlug:[a-z]{1,2}}/{channelSlug:[a-zA-Z0-9]{1,20}}',
                 templateUrl: 'templates/mod.html',
                 controller: 'ModController as vm'
             })
-	        .state('art', {
-    	        url: '/art',
-	            templateUrl: 'templates/art.html',
-	            controller: 'ArtController as vm'
+            .state('user', {
+                url: '/u/{Username:[a-zA-Z0-9_-]{1,20}}',
+                templateUrl: 'templates/user.html',
+                controller: 'UserController as vm'
+            })
+	        .state('channel', {
+	            url: '/{networkSlug:[a-z]{1,2}}/{channelSlug:[a-zA-Z0-9]{1,20}}',
+	            templateUrl: 'templates/channel.html',
+	            controller: 'ChannelController as vm'
 	        });
 	});
 

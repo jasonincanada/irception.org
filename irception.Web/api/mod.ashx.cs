@@ -10,7 +10,7 @@ namespace irception.Web.api
     /// <summary>
     /// Return channel info pertaining to moderator activities
     /// </summary>
-    public class chanModData : APIBase, IHttpHandler
+    public class mod : APIBase, IHttpHandler
     {
         private HttpContext _context;
 

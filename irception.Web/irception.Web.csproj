@@ -73,9 +73,10 @@
     <Content Include="api\invite.ashx" />
     <Content Include="api\inviteeNick.ashx" />
     <Content Include="api\register.ashx" />
-    <Content Include="api\chanModData.ashx" />
+    <Content Include="api\mod.ashx" />
     <None Include="css\irc.less" />
     <Content Include="app\app.controllers.js" />
+    <Content Include="app\app.directives.js" />
     <Content Include="app\app.services.js" />
     <Content Include="app\data.service.js" />
     <Content Include="css\irc.css" />
@@ -95,13 +96,14 @@
     <Content Include="app\common.services.js" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
-    <Content Include="templates\art.html" />
     <Content Include="templates\channel.html" />
     <Content Include="templates\config.html" />
+    <Content Include="templates\directives\irception-user.html" />
     <Content Include="templates\invite.html" />
     <Content Include="templates\login.html" />
     <Content Include="templates\me.html" />
     <Content Include="templates\mod.html" />
+    <Content Include="templates\user.html" />
     <Content Include="templates\welcome.html" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -115,8 +117,8 @@
     <Compile Include="api\chan.ashx.cs">
       <DependentUpon>chan.ashx</DependentUpon>
     </Compile>
-    <Compile Include="api\chanModData.ashx.cs">
-      <DependentUpon>chanModData.ashx</DependentUpon>
+    <Compile Include="api\mod.ashx.cs">
+      <DependentUpon>mod.ashx</DependentUpon>
     </Compile>
     <Compile Include="api\config.ashx.cs">
       <DependentUpon>config.ashx</DependentUpon>

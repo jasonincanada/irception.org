@@ -14,6 +14,7 @@
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>    
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
 
     <link href="css/irc.css" rel="stylesheet" />
     <link rel="icon" href="img/favicon.png" type="image/x-icon" />    
@@ -21,6 +22,7 @@
     <script src="app/common.services.js?4"></script>
     <script src="app/app.main.js?4"></script>
     <script src="app/app.controllers.js?4"></script>
+    <script src="app/app.directives.js?4"></script>
     <script src="app/app.services.js?4"></script>
     <script src="app/data.service.js?4"></script>
 </head>
@@ -41,15 +43,9 @@
             </div>
 
             <div id="navbar">
-                <div class="navbar-right irc-nav">
-                    
-                    <a href="" ng-show="vm.Session.Nick">{{ vm.Session.Nick }}</a>
-
-                    <a href="" ng-show="false">{{ vm.Session.Token }}</a>                    
-                    <a href="" ng-show="vm.Session.UserID" ng-click="vm.goUser()"><span class="glyphicon glyphicon-user"></span> {{ vm.Session.Username }}</a>
-                    <a href="" ng-show="vm.Session.IP && false"><span class="glyphicon glyphicon-globe"></span> {{ vm.Session.IP }}</a>
-
-                    <a href="" ng-click="vm.goLogin()" ng-if="!vm.Session.UserID">Login</a>
+                <div class="navbar-right irc-nav">                                        
+                    <a href="" ui-sref="me" ng-show="vm.Session.UserID"><i class="fa fa-fw fa-user"></i>{{ vm.Session.Username }}</a>
+                    <a href="" ui-sref="login" ng-if="!vm.Session.UserID">Login</a>
                 </div>                            
             </div>
         </div>
