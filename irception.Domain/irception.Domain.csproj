@@ -160,6 +160,7 @@
       <LastGenOutput>ircbotModel.cs</LastGenOutput>
       <CustomToolNamespace>irception.Domain</CustomToolNamespace>
     </Content>
+    <Content Include="Notes.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

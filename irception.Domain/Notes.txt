@@ -1,0 +1,2 @@
+﻿
+Sample channel in dev: https://ircbot.azurewebsites.net/#/dr/ircbot
