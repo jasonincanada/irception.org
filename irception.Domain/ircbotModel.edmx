@@ -146,6 +146,7 @@
           <Property Name="Title" Type="varchar" MaxLength="200" />
           <Property Name="Description" Type="varchar" MaxLength="4000" />
           <Property Name="NSFW" Type="bit" />
+          <Property Name="VoteCount" Type="int" />
         </EntityType>
         <EntityType Name="URLUpdateHistory">
           <Key>
@@ -166,6 +167,16 @@
           <Property Name="PasswordSHA256" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="FKUserIDInvitedBy" Type="int" />
           <Property Name="InviteLevel" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vote">
+          <Key>
+            <PropertyRef Name="FKURLID" />
+            <PropertyRef Name="FKUserID" />
+          </Key>
+          <Property Name="FKURLID" Type="int" Nullable="false" />
+          <Property Name="FKUserID" Type="int" Nullable="false" />
+          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="DateVoted" Type="datetime" Nullable="false" />
         </EntityType>
         <Association Name="FK_Auth_FKNetworkID">
           <End Role="Network" Type="Self.Network" Multiplicity="0..1" />
@@ -431,6 +442,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Vote_FKURLID">
+          <End Role="URL" Type="Self.URL" Multiplicity="1" />
+          <End Role="Vote" Type="Self.Vote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="URL">
+              <PropertyRef Name="URLID" />
+            </Principal>
+            <Dependent Role="Vote">
+              <PropertyRef Name="FKURLID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vote_FKUserID">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Vote" Type="Self.Vote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Vote">
+              <PropertyRef Name="FKUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ircbotModelStoreContainer">
           <EntitySet Name="Auth" EntityType="Self.Auth" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AutoNSFW" EntityType="Self.AutoNSFW" Schema="dbo" store:Type="Tables" />
@@ -446,6 +481,7 @@
           <EntitySet Name="URL" EntityType="Self.URL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="URLUpdateHistory" EntityType="Self.URLUpdateHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vote" EntityType="Self.Vote" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Auth_FKNetworkID" Association="Self.FK_Auth_FKNetworkID">
             <End Role="Network" EntitySet="Network" />
             <End Role="Auth" EntitySet="Auth" />
@@ -534,6 +570,14 @@
             <End Role="URL" EntitySet="URL" />
             <End Role="URLUpdateHistory" EntitySet="URLUpdateHistory" />
           </AssociationSet>
+          <AssociationSet Name="FK_Vote_FKURLID" Association="Self.FK_Vote_FKURLID">
+            <End Role="URL" EntitySet="URL" />
+            <End Role="Vote" EntitySet="Vote" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vote_FKUserID" Association="Self.FK_Vote_FKUserID">
+            <End Role="User" EntitySet="User" />
+            <End Role="Vote" EntitySet="Vote" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -556,6 +600,7 @@
           <NavigationProperty Name="Invitees" Relationship="ircbotModel.FK_Invite_FKUserIDInvitedBy" FromRole="User" ToRole="Invite" />
           <NavigationProperty Name="Invite" Relationship="ircbotModel.FK_Invite_FKUserIDAcceptedBy" FromRole="User" ToRole="Invite" />
           <NavigationProperty Name="ChannelVisits" Relationship="ircbotModel.FK_ChannelVisit_FKUserID" FromRole="User" ToRole="ChannelVisit" />
+          <NavigationProperty Name="Votes" Relationship="ircbotModel.FK_Vote_FKUserID" FromRole="User" ToRole="Vote" />
         </EntityType>
         <EntityContainer Name="ircbotEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Users" EntityType="Self.User" />
@@ -660,6 +705,15 @@
             <End Role="User" EntitySet="Users" />
             <End Role="ChannelVisit" EntitySet="ChannelVisits" />
           </AssociationSet>
+          <EntitySet Name="Votes" EntityType="ircbotModel.Vote" />
+          <AssociationSet Name="FK_Vote_FKURLID" Association="ircbotModel.FK_Vote_FKURLID">
+            <End Role="URL" EntitySet="URLs" />
+            <End Role="Vote" EntitySet="Votes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vote_FKUserID" Association="ircbotModel.FK_Vote_FKUserID">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Vote" EntitySet="Votes" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Network">
           <Key>
@@ -761,6 +815,8 @@
           <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Name="NSFW" Type="Boolean" />
+          <NavigationProperty Name="Votes" Relationship="ircbotModel.FK_Vote_FKURLID" FromRole="URL" ToRole="Vote" />
+          <Property Name="VoteCount" Type="Int32" />
         </EntityType>
         <Association Name="FK_URL_FKChannelID">
           <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="1" />
@@ -1103,6 +1159,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Vote">
+          <Key>
+            <PropertyRef Name="FKURLID" />
+            <PropertyRef Name="FKUserID" />
+          </Key>
+          <Property Name="FKURLID" Type="Int32" Nullable="false" />
+          <Property Name="FKUserID" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="DateVoted" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="URL" Relationship="ircbotModel.FK_Vote_FKURLID" FromRole="Vote" ToRole="URL" />
+          <NavigationProperty Name="User" Relationship="ircbotModel.FK_Vote_FKUserID" FromRole="Vote" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Vote_FKURLID">
+          <End Type="ircbotModel.URL" Role="URL" Multiplicity="1" />
+          <End Type="ircbotModel.Vote" Role="Vote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="URL">
+              <PropertyRef Name="URLID" />
+            </Principal>
+            <Dependent Role="Vote">
+              <PropertyRef Name="FKURLID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vote_FKUserID">
+          <End Type="ircbotModel.User" Role="User" Multiplicity="1" />
+          <End Type="ircbotModel.Vote" Role="Vote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Vote">
+              <PropertyRef Name="FKUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1168,6 +1260,7 @@
           <EntitySetMapping Name="URLs">
             <EntityTypeMapping TypeName="ircbotModel.URL">
               <MappingFragment StoreEntitySet="URL">
+                <ScalarProperty Name="VoteCount" ColumnName="VoteCount" />
                 <ScalarProperty Name="NSFW" ColumnName="NSFW" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
@@ -1283,6 +1376,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Votes">
+            <EntityTypeMapping TypeName="ircbotModel.Vote">
+              <MappingFragment StoreEntitySet="Vote">
+                <ScalarProperty Name="DateVoted" ColumnName="DateVoted" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="FKUserID" ColumnName="FKUserID" />
+                <ScalarProperty Name="FKURLID" ColumnName="FKURLID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1342,6 +1445,9 @@
         <EntityTypeShape EntityType="ircbotModel.ChannelVisit" Width="1.5" PointX="8.5" PointY="0.875" />
         <AssociationConnector Association="ircbotModel.FK_ChannelVisit_FKChannelID" />
         <AssociationConnector Association="ircbotModel.FK_ChannelVisit_FKUserID" />
+        <EntityTypeShape EntityType="ircbotModel.Vote" Width="1.5" PointX="4.5" PointY="11.125" />
+        <AssociationConnector Association="ircbotModel.FK_Vote_FKURLID" />
+        <AssociationConnector Association="ircbotModel.FK_Vote_FKUserID" />
       </Diagram>
     </Diagrams>
   </Designer>

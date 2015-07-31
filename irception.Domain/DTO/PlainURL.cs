@@ -12,6 +12,7 @@ namespace irception.Domain.DTO
         public long AtTicks { get; set; }
         public int SecondsElapsed { get; set; }
         public bool NSFW { get; set; }
+        public int VoteCount { get; set; }
 
         public string Type { get; set; }
         public string Thumbnail { get; set; }
@@ -33,7 +34,8 @@ namespace irception.Domain.DTO
                 Thumbnail = url.Thumbnail,
                 Title = url.Title,
                 Description = url.Description,
-                NSFW = url.NSFW ?? false
+                NSFW = url.NSFW ?? false,
+                VoteCount = url.VoteCount ?? 0
             };
         }
     }

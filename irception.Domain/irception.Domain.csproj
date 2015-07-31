@@ -131,6 +131,9 @@
       <DependentUpon>ircbotModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
+    <Compile Include="Vote.cs">
+      <DependentUpon>ircbotModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />

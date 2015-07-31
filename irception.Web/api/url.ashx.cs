@@ -19,13 +19,13 @@ namespace irception.Web.api
 
                 if (!repo.OnIgnore(requestParams.Nick, requestParams.ChannelID))
                 {
-
                     URL url = new URL
                     {
                         At = DateTime.UtcNow,
                         Nick = requestParams.Nick,
                         URL1 = requestParams.URL,
-                        FKChannelID = requestParams.ChannelID
+                        FKChannelID = requestParams.ChannelID,
+                        VoteCount = 0
                     };
 
                     if (requestParams.YouTube != null)

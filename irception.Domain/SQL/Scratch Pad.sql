@@ -1,4 +1,25 @@
-﻿/*
+﻿
+
+create table Vote (
+	FKURLID int not null,
+	FKUserID int not null,
+	Value	int not null,
+	DateVoted datetime not null
+)
+
+alter table Vote add constraint PK_Vote primary key clustered (FKURLID, FKUserID)
+
+alter table Vote
+add constraint FK_Vote_FKUserID
+foreign key (FKUserID)
+references [User](UserID)
+
+alter table Vote
+add constraint FK_Vote_FKURLID
+foreign key (FKURLID)
+references [URL](URLID)
+
+/*
 drop table FirstChannelVisit
 
 create table ChannelVisit (

@@ -39,5 +39,6 @@ namespace irception.Domain
         public DbSet<Invite> Invites { get; set; }
         public DbSet<AutoNSFW> AutoNSFWs { get; set; }
         public DbSet<ChannelVisit> ChannelVisits { get; set; }
+        public DbSet<Vote> Votes { get; set; }
     }
 }

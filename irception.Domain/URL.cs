@@ -14,6 +14,11 @@ namespace irception.Domain
     
     public partial class URL
     {
+        public URL()
+        {
+            this.Votes = new HashSet<Vote>();
+        }
+    
         public int URLID { get; set; }
         public int FKChannelID { get; set; }
         public string URL1 { get; set; }
@@ -24,7 +29,9 @@ namespace irception.Domain
         public string Title { get; set; }
         public string Description { get; set; }
         public Nullable<bool> NSFW { get; set; }
+        public Nullable<int> VoteCount { get; set; }
     
         public virtual Channel Channel { get; set; }
+        public virtual ICollection<Vote> Votes { get; set; }
     }
 }
