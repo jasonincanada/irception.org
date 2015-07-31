@@ -13,6 +13,8 @@ namespace irception.Domain.DTO
     {
         public int UserID { get; set; }
         public string Username { get; set; }
+        public int InviteLevel { get; set; }
+        public string DateRegisteredDisplay { get; set; }
         public List<PlainPermission> Permissions { get; set; }
 
         public static PlainUser FromModel(User user)
@@ -21,6 +23,8 @@ namespace irception.Domain.DTO
             {
                 UserID = user.UserID,
                 Username = user.Username,
+                InviteLevel = user.InviteLevel,
+                DateRegisteredDisplay = string.Format("{0:MMM d, yyyy}", user.DateAdded),
                 Permissions = user
                     .Permissions
                     .Select(p => new PlainPermission

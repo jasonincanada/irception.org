@@ -74,6 +74,7 @@
     <Content Include="api\inviteeNick.ashx" />
     <Content Include="api\register.ashx" />
     <Content Include="api\mod.ashx" />
+    <Content Include="api\user.ashx" />
     <None Include="css\irc.less" />
     <Content Include="app\app.controllers.js" />
     <Content Include="app\app.directives.js" />
@@ -143,6 +144,9 @@
     </Compile>
     <Compile Include="api\url.ashx.cs">
       <DependentUpon>url.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="api\user.ashx.cs">
+      <DependentUpon>user.ashx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

@@ -316,5 +316,18 @@ namespace irception.Domain
                 })
                 .ToList();
         }
+
+        /// <summary>
+        /// Return publically-viewable information for a user
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public User GetUser(string username)
+        {
+            return _context
+                .Users
+                .Where(u => u.Username == username)
+                .FirstOrDefault();
+        }
     }    
 }

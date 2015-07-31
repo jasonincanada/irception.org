@@ -11,13 +11,15 @@
         return vm;
     });
 
-    app.controller('UserController', function ($state, $stateParams, Session) {
+    app.controller('UserController', function ($state, $stateParams, Session, DataService) {
         var vm = this;
 
         vm.Session = Session;
         vm.Username = $stateParams.Username;
-
-        // fetch user info...
+        
+        DataService.getUser(vm.Username, function (data) {
+            vm.User = data.User;
+        });
 
         return vm;
     });

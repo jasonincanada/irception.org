@@ -23,7 +23,7 @@
                 .get('/api/chan.ashx?network=' + networkSlug + '&channel=' + channelSlug)
                 .success(successFunc);
         };
-
+        
         service.getChannelFromLast = function (networkSlug, channelSlug, lastURLUpdateID, successFunc) {
             $http
                 .get('/api/chan.ashx?network=' + networkSlug + '&channel=' + channelSlug + '&luuhid=' + lastURLUpdateID)
@@ -67,6 +67,12 @@
         service.register = function (params, successFunc) {
             $http
                 .post('/api/register.ashx', params)
+                .success(successFunc);
+        };
+
+        service.getUser = function (username, successFunc) {
+            $http
+                .get('/api/user.ashx?username=' + username)
                 .success(successFunc);
         };
 
