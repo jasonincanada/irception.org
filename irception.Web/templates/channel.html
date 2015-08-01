@@ -12,11 +12,20 @@
                         <th class="url-row-padding" colspan="2">
                             <span class="crumbs">                                
                                 / {{ vm.NetworkSlug }}
-                                / {{ vm.Channel.Slug }}
+                                / {{ vm.ChannelSlug }}
 
                                 <span class="pull-right">
+                                    
+                                    <a href="" ui-sref="statsLines({ networkSlug: vm.NetworkSlug, channelSlug: vm.ChannelSlug })">
+                                        lines
+                                    </a>
+
+                                    <a href="" ui-sref="statsraces({ networkSlug: vm.NetworkSlug, channelSlug: vm.ChannelSlug })">
+                                        &middot; race
+                                    </a>
+
                                     <a ui-sref="mod({ networkSlug: vm.NetworkSlug, channelSlug: vm.ChannelSlug })">
-                                        / mod
+                                        &middot; mod
                                     </a>
                                 </span>
                             </span>                            

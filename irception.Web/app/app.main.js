@@ -3,8 +3,20 @@
 
 	var app = angular.module('ircApp', [
         'common.services',
-        'ui.router'
+        'ui.router',
+        'chart.js'
 	]);
+
+	app.config(['ChartJsProvider', function (ChartJsProvider) {
+	    
+	    ChartJsProvider.setOptions({
+	        colours: ['#A3A7AF'],
+	        animation: false,
+	        scaleShowGridLines: false,
+	        pointDot: false,
+	        datasetStrokeWidth: 1
+	    });
+	}])
    	
 	app.config(function ($stateProvider, $urlRouterProvider) {
 	   
@@ -50,10 +62,20 @@
                 templateUrl: 'templates/user.html',
                 controller: 'UserController as vm'
             })
-	        .state('channel', {
-	            url: '/{networkSlug:[a-z]{1,2}}/{channelSlug:[a-zA-Z0-9]{1,20}}',
-	            templateUrl: 'templates/channel.html',
-	            controller: 'ChannelController as vm'
+            .state('channel', {
+                url: '/{networkSlug:[a-z]{1,2}}/{channelSlug:[a-zA-Z0-9]{1,20}}',
+                templateUrl: 'templates/channel.html',
+                controller: 'ChannelController as vm'
+            })
+	        .state('statsLines', {
+	            url: '/{networkSlug:[a-z]{1,2}}/{channelSlug:[a-zA-Z0-9]{1,20}}/stats/lines',
+	            templateUrl: 'templates/stats-lines.html',
+	            controller: 'StatsController as vm'
+	        })
+	        .state('statsRace', {
+	            url: '/{networkSlug:[a-z]{1,2}}/{channelSlug:[a-zA-Z0-9]{1,20}}/stats/race',
+	            templateUrl: 'templates/stats-race.html',
+	            controller: 'StatsRaceController as vm'
 	        });
 	});
 

@@ -75,6 +75,7 @@
     <Content Include="api\register.ashx" />
     <Content Include="api\mod.ashx" />
     <Content Include="api\user.ashx" />
+    <Content Include="api\stats.ashx" />
     <None Include="css\irc.less" />
     <Content Include="app\app.controllers.js" />
     <Content Include="app\app.directives.js" />
@@ -85,6 +86,9 @@
     <Content Include="img\irception-white-bg.png" />
     <Content Include="img\irception.png" />
     <Content Include="img\velvet.png" />
+    <Content Include="lib\angular-chart.css" />
+    <Content Include="lib\angular-chart.min.js" />
+    <Content Include="lib\Chart.min.js" />
     <Content Include="packages.config" />
     <Content Include="api\config.ashx" />
     <Content Include="api\l.ashx" />
@@ -104,6 +108,8 @@
     <Content Include="templates\login.html" />
     <Content Include="templates\me.html" />
     <Content Include="templates\mod.html" />
+    <Content Include="templates\stats-lines.html" />
+    <Content Include="templates\stats-race.html" />
     <Content Include="templates\user.html" />
     <Content Include="templates\welcome.html" />
     <Content Include="Web.config" />
@@ -138,6 +144,9 @@
     </Compile>
     <Compile Include="api\register.ashx.cs">
       <DependentUpon>register.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="api\stats.ashx.cs">
+      <DependentUpon>stats.ashx</DependentUpon>
     </Compile>
     <Compile Include="api\test.ashx.cs">
       <DependentUpon>test.ashx</DependentUpon>

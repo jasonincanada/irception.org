@@ -113,6 +113,7 @@
     <Compile Include="Repository\Mod.cs" />
     <Compile Include="Repository\Network.cs" />
     <Compile Include="Repository\Repository.cs" />
+    <Compile Include="Repository\Stats.cs" />
     <Compile Include="Repository\URL.cs" />
     <Compile Include="Repository\User.cs" />
     <Compile Include="Server.cs">

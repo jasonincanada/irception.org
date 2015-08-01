@@ -262,10 +262,11 @@
             });
         };
 
+        vm.ChannelSlug = $stateParams.channelSlug;
+        vm.NetworkSlug = $stateParams.networkSlug;
+
         DataService.getChannel($stateParams.networkSlug, $stateParams.channelSlug, function (data) {
-            vm.Channel = data.Channel;
-            vm.ChannelSlug = data.Channel.Slug;
-            vm.NetworkSlug = data.NetworkSlug;
+            vm.Channel = data.Channel;            
             vm.updateURLs(data.URLs);
             vm.refreshElapsed(0);
 
@@ -307,6 +308,66 @@
         vm.unsetNSFW = function (urlID) {
             DataService.unsetAttr(urlID, 'nsfw', function () { });
         };
+
+        return vm;
+    });
+
+    app.controller('StatsController', function ($scope, $state, $stateParams, Session, $http) {
+        var vm = this;
+
+        vm.Session = Session;
+        vm.ChannelSlug = $stateParams.channelSlug;
+        vm.NetworkSlug = $stateParams.networkSlug;
+        
+        $http
+            .get('/api/stats.ashx?channel=' + vm.ChannelSlug + '&network=' + vm.NetworkSlug + '&dataset=lines')
+            .success(function (data) {
+                $scope.data = [ data.data ];
+                $scope.labels = data.labels;
+            });
+
+        return vm;
+    });
+
+    app.controller('StatsRaceController', function ($scope, $state, $stateParams, Session, $http, $timeout) {
+        var vm = this;
+
+        vm.Session = Session;
+        vm.ChannelSlug = $stateParams.channelSlug;
+        vm.NetworkSlug = $stateParams.networkSlug;
+
+        vm.Message = 'Loading from server...';
+
+        $http
+            .get('/api/stats.ashx?channel=' + vm.ChannelSlug + '&network=' + vm.NetworkSlug + '&dataset=race')
+            .success(function (data) {
+                vm.Message = 'Rendering locally...';
+
+                $timeout(function () {
+                    vm.Message = '';
+
+                    $scope.data = data.data;
+                    $scope.series = data.series;
+                    $scope.labels = data.labels;
+
+                    $scope.colours = [];
+                    /*
+                        '#000000',
+                        '#111111',
+                        '#222233',
+                        '#333344',
+                        '#444455',
+                        '#555566',
+                        '#666677',
+                        '#777788',
+                        '#888899',
+                        '#9999AA',
+                        '#AAAABB',
+                        '#BBBBCC'
+                    ];
+                    */
+                });
+            });
 
         return vm;
     });

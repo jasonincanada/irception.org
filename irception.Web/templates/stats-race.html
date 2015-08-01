@@ -1,0 +1,29 @@
+﻿
+<div class="container irception">
+
+    <span class="crumbs">
+        / {{ vm.NetworkSlug }}
+        <a href="" ui-sref="channel({ networkSlug: vm.NetworkSlug, channelSlug: vm.ChannelSlug })">
+            / {{ vm.ChannelSlug }}
+        </a>
+        / stats / race
+
+        <span class="pull-right">
+            <a href="" ui-sref="statsLines({ networkSlug: vm.NetworkSlug, channelSlug: vm.ChannelSlug })">
+                &middot; lines
+            </a>
+        </span>
+    </span>
+
+    <hr class="hr-grid-top" />
+    <div class="row">
+        <div class="col-md-12">
+
+            <h3>Line Race</h3>
+
+            <p ng-if="vm.Message">{{ vm.Message }}</p>
+
+            <canvas class="chart chart-line" data="data" labels="labels" series="series" legend="true" colours="colours"></canvas>
+        </div>
+    </div>
+</div>

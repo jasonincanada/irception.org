@@ -1,0 +1,27 @@
+﻿
+<div class="container irception">
+
+    <span class="crumbs">
+        / {{ vm.NetworkSlug }}
+        <a href="" ui-sref="channel({ networkSlug: vm.NetworkSlug, channelSlug: vm.ChannelSlug })">
+            / {{ vm.ChannelSlug }}
+        </a>
+        / stats / lines
+
+        <span class="pull-right">
+            <a href="" ui-sref="statsRace({ networkSlug: vm.NetworkSlug, channelSlug: vm.ChannelSlug })">
+                &middot; race
+            </a>
+        </span>
+    </span>
+
+    <hr class="hr-grid-top" />
+    <div class="row">
+        <div class="col-md-12">
+
+            <h3>Lines for Last 14 Days</h3>
+
+            <canvas class="chart chart-bar" data="data" labels="labels"></canvas>
+        </div>
+    </div>
+</div>
