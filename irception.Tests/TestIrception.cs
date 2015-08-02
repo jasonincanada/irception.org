@@ -16,7 +16,7 @@ namespace irception.Tests
                 "valid-chars",
                 "_valid_chars_",
                 "a0-_",
-                "12345678901234567890123456789012345678901234567890"
+                "123456789012345" // Max length allowed
             };
 
             var fails = new string[]
@@ -27,7 +27,7 @@ namespace irception.Tests
                 " ",
                 "[invalidchars]",
                 "(invalidchars)",
-                "123456789012345678901234567890123456789012345678901" // Too long
+                "1234567890123456" // Too long
             };
 
             foreach (var pass in passes)

@@ -9,7 +9,7 @@ namespace irception.Domain
             if (string.IsNullOrWhiteSpace(username))
                 return false;
 
-            var regex = new Regex("^[a-zA-Z0-9_-]{1,50}$");
+            var regex = new Regex("^[a-zA-Z0-9_-]{1,15}$");
 
             return regex.IsMatch(username);
         }

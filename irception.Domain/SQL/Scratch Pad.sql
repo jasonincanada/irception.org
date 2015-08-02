@@ -1,4 +1,7 @@
 ﻿
+
+alter table [User] alter column Username varchar(15) not null
+
 /*
 
 truncate table linesgroupedday

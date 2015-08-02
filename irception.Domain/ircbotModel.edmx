@@ -85,7 +85,7 @@
           <Property Name="FKChannelID" Type="int" Nullable="false" />
           <Property Name="At" Type="datetime" Nullable="false" />
           <Property Name="Nick" Type="varchar" MaxLength="50" />
-          <Property Name="Length" Type="int" />
+          <Property Name="Length" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="LinesGroupedDay">
           <Key>
@@ -175,7 +175,7 @@
           <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DateAdded" Type="datetime" Nullable="false" />
           <Property Name="DateDeleted" Type="datetime" />
-          <Property Name="Username" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Username" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="PasswordSHA256" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="FKUserIDInvitedBy" Type="int" />
           <Property Name="InviteLevel" Type="int" Nullable="false" />
@@ -619,7 +619,7 @@
           <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DateAdded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateDeleted" Type="DateTime" Precision="3" />
-          <Property Name="Username" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="PasswordSHA256" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Ignores" Relationship="ircbotModel.FK_Ignore_FKUserIDAddedBy" FromRole="User" ToRole="Ignore" />
           <NavigationProperty Name="Permissions" Relationship="ircbotModel.FK_Permission_FKUserID" FromRole="User" ToRole="Permission" />
