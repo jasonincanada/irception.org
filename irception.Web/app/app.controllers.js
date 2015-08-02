@@ -335,15 +335,21 @@
         vm.NetworkSlug = $stateParams.networkSlug;
 
         // Dataset colors
-        $scope.colours = ['#50B5F5','#AAAAAA','#AA3A50','#FCDC46','#666666','#E8950C','#DD90CF','#531DF7','#21E2A5','#888888'];
+        $scope.colours = ['#50B5F5', '#AAAAAA', '#AA3A50', '#FCDC46', '#666666', '#E8950C', '#DD90CF', '#531DF7', '#21E2A5', '#888888'];
+        $scope.options = {
+            scaleOverride: true,
+            scaleStepWidth: 100
+        };
 
         vm.refreshStats = function () {
             DataService.getStats(vm.ChannelSlug, vm.NetworkSlug, 'race', function (data) {
-
                 $scope.data = data.data;
                 $scope.series = data.series;
-                $scope.labels = data.labels;                
-            });
+                $scope.labels = data.labels;
+
+                // Smartly scale the y axis to just fit the data
+                $scope.options.scaleSteps = data.data[0][0] / 100 + 2;
+            });            
         };
 
         vm.refreshStats();
