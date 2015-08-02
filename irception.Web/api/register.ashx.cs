@@ -2,8 +2,6 @@
 using irception.Domain.DTO;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 
 namespace irception.Web.api
@@ -22,45 +20,48 @@ namespace irception.Web.api
                 var repo = new Repository();
                 API.RegisterRequestParams requestParams = API.GetRegisterRequestParams(GetRequestBody(context));
 
-                requestParams.Username = requestParams.Username.Trim();
+                string username = requestParams.Username.Trim();
 
-                // TODO: username validation
-
-                if (repo.InviteAccepted(requestParams.SUID))
+                if (!Irception.IsValidUsername(username))
                 {
                     json = JsonConvert.SerializeObject(new
                     {
                         success = false,
-                        UserMessage = "This invite has already been accepted."
+                        UserMessage = "Usernames consist of a-z 0-9 _ -"
+                    });
+                }                
+                else if (!repo.UsernameAvailable(username))
+                {
+                    json = JsonConvert.SerializeObject(new
+                    {
+                        success = false,
+                        UserMessage = "Username taken."
+                    });
+                }
+                else if (repo.InviteAccepted(requestParams.SUID))
+                {
+                    json = JsonConvert.SerializeObject(new
+                    {
+                        success = false,
+                        UserMessage = "Invite already accepted."
                     });
                 }
                 else
-                { 
-                    if (!repo.UsernameAvailable(requestParams.Username))
+                {
+                    User user = repo.Register(username, requestParams.Password, requestParams.SUID);
+
+                    if (user == null)
+                        throw new Exception("Error during registration.");
+
+                    Token token = repo.GetOrCreateToken(user);
+
+                    json = JsonConvert.SerializeObject(new
                     {
-                        json = JsonConvert.SerializeObject(new
-                        {
-                            success = false,
-                            UserMessage = "This username has already been used."
-                        });
-                    }
-                    else
-                    {                                     
-                        User user = repo.Register(requestParams.Username, requestParams.Password, requestParams.SUID);
-
-                        if (user == null)
-                            throw new Exception("Error during registration.");
-
-                        Token token = repo.GetOrCreateToken(user);
-
-                        json = JsonConvert.SerializeObject(new
-                        {
-                            success = true,
-                            User = PlainUser.FromModel(user),
-                            Token = PlainToken.FromModel(token)
-                        });
-                    }
-                }
+                        success = true,
+                        User = PlainUser.FromModel(user),
+                        Token = PlainToken.FromModel(token)
+                    });
+                }                
             }
             catch (Exception ex)
             {

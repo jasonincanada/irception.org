@@ -99,6 +99,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ircbotModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Irception.cs" />
     <Compile Include="Line.cs">
       <DependentUpon>ircbotModel.tt</DependentUpon>
     </Compile>
