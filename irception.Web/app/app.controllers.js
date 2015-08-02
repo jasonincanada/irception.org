@@ -312,58 +312,51 @@
         return vm;
     });
 
-    app.controller('StatsController', function ($scope, $state, $stateParams, Session, $http) {
+    app.controller('StatsController', function ($scope, $state, $stateParams, Session, DataService) {
         var vm = this;
 
         vm.Session = Session;
         vm.ChannelSlug = $stateParams.channelSlug;
         vm.NetworkSlug = $stateParams.networkSlug;
         
-        $http
-            .get('/api/stats.ashx?channel=' + vm.ChannelSlug + '&network=' + vm.NetworkSlug + '&dataset=lines')
-            .success(function (data) {
-                $scope.data = [ data.data ];
-                $scope.labels = data.labels;
-            });
+        DataService.getStats(vm.ChannelSlug, vm.NetworkSlug, 'lines', function (data) {
+            $scope.data = [ data.data ];
+            $scope.labels = data.labels;
+        });
 
         return vm;
     });
 
-    app.controller('StatsRaceController', function ($scope, $state, $stateParams, Session, $http, $timeout) {
+    app.controller('StatsRaceController', function ($scope, $state, $stateParams, $interval, Session, DataService) {
         var vm = this;
 
         vm.Session = Session;
         vm.ChannelSlug = $stateParams.channelSlug;
         vm.NetworkSlug = $stateParams.networkSlug;
 
-        $http
-            .get('/api/stats.ashx?channel=' + vm.ChannelSlug + '&network=' + vm.NetworkSlug + '&dataset=race')
-            .success(function (data) {
-                
-                $timeout(function () {
+        // Dataset colors
+        $scope.colours = ['#50B5F5','#AAAAAA','#AA3A50','#FCDC46','#666666','#E8950C','#DD90CF','#531DF7','#21E2A5','#888888'];
 
-                    $scope.data = data.data;
-                    $scope.series = data.series;
-                    $scope.labels = data.labels;
+        vm.refreshStats = function () {
+            DataService.getStats(vm.ChannelSlug, vm.NetworkSlug, 'race', function (data) {
 
-                    $scope.colours = [];
-                    /*
-                        '#000000',
-                        '#111111',
-                        '#222233',
-                        '#333344',
-                        '#444455',
-                        '#555566',
-                        '#666677',
-                        '#777788',
-                        '#888899',
-                        '#9999AA',
-                        '#AAAABB',
-                        '#BBBBCC'
-                    ];
-                    */
-                });
+                $scope.data = data.data;
+                $scope.series = data.series;
+                $scope.labels = data.labels;                
             });
+        };
+
+        vm.refreshStats();
+
+        var interval = $interval(function () {
+            vm.refreshStats();
+        }, 30 * 1000);
+
+        $scope.$on('$destroy', function () {
+            if (interval) {
+                $interval.cancel(interval);
+            }
+        });
 
         return vm;
     });

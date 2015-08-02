@@ -76,6 +76,14 @@
                 .success(successFunc);
         };
 
+        service.getStats = function (channelSlug, networkSlug, dataset, successFunc) {            
+            $http
+                .get('/api/stats.ashx?channel=' + channelSlug 
+                        + '&network=' + networkSlug 
+                        + '&dataset=' + dataset)
+                .success(successFunc);
+        };
+
         return service;
     });
 
