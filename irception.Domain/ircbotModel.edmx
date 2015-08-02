@@ -87,6 +87,18 @@
           <Property Name="Nick" Type="varchar" MaxLength="50" />
           <Property Name="Length" Type="int" />
         </EntityType>
+        <EntityType Name="LinesGroupedDay">
+          <Key>
+            <PropertyRef Name="FKChannelID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Nick" />
+          </Key>
+          <Property Name="FKChannelID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Nick" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LineCount" Type="int" Nullable="false" />
+          <Property Name="LengthSum" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Network">
           <Key>
             <PropertyRef Name="NetworkID" />
@@ -146,7 +158,7 @@
           <Property Name="Title" Type="varchar" MaxLength="200" />
           <Property Name="Description" Type="varchar" MaxLength="4000" />
           <Property Name="NSFW" Type="bit" />
-          <Property Name="VoteCount" Type="int" />
+          <Property Name="VoteCount" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="URLUpdateHistory">
           <Key>
@@ -346,6 +358,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_LinesGroupedDay_FKChannelID">
+          <End Role="Channel" Type="Self.Channel" Multiplicity="1" />
+          <End Role="LinesGroupedDay" Type="Self.LinesGroupedDay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="LinesGroupedDay">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Permission_FKChannelID">
           <End Role="Channel" Type="Self.Channel" Multiplicity="1" />
           <End Role="Permission" Type="Self.Permission" Multiplicity="*" />
@@ -474,6 +498,7 @@
           <EntitySet Name="Ignore" EntityType="Self.Ignore" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Invite" EntityType="Self.Invite" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Line" EntityType="Self.Line" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LinesGroupedDay" EntityType="Self.LinesGroupedDay" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Network" EntityType="Self.Network" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Server" EntityType="Self.Server" Schema="dbo" store:Type="Tables" />
@@ -537,6 +562,10 @@
           <AssociationSet Name="FK_Line_FKChannelID" Association="Self.FK_Line_FKChannelID">
             <End Role="Channel" EntitySet="Channel" />
             <End Role="Line" EntitySet="Line" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LinesGroupedDay_FKChannelID" Association="Self.FK_LinesGroupedDay_FKChannelID">
+            <End Role="Channel" EntitySet="Channel" />
+            <End Role="LinesGroupedDay" EntitySet="LinesGroupedDay" />
           </AssociationSet>
           <AssociationSet Name="FK_Permission_FKChannelID" Association="Self.FK_Permission_FKChannelID">
             <End Role="Channel" EntitySet="Channel" />
@@ -714,6 +743,11 @@
             <End Role="User" EntitySet="Users" />
             <End Role="Vote" EntitySet="Votes" />
           </AssociationSet>
+          <EntitySet Name="LinesGroupedDays" EntityType="ircbotModel.LinesGroupedDay" />
+          <AssociationSet Name="FK_LinesGroupedDay_FKChannelID" Association="ircbotModel.FK_LinesGroupedDay_FKChannelID">
+            <End Role="Channel" EntitySet="Channels" />
+            <End Role="LinesGroupedDay" EntitySet="LinesGroupedDays" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Network">
           <Key>
@@ -764,6 +798,7 @@
           <NavigationProperty Name="Ignores" Relationship="ircbotModel.FK_Ignore_FKChannelID" FromRole="Channel" ToRole="Ignore" />
           <NavigationProperty Name="Permissions" Relationship="ircbotModel.FK_Permission_FKChannelID" FromRole="Channel" ToRole="Permission" />
           <NavigationProperty Name="AutoNSFWs" Relationship="ircbotModel.FK_AutoNSFW_FKChannelID" FromRole="Channel" ToRole="AutoNSFW" />
+          <NavigationProperty Name="LinesGroupedDay" Relationship="ircbotModel.FK_LinesGroupedDay_FKChannelID" FromRole="Channel" ToRole="LinesGroupedDay" />
         </EntityType>
         <Association Name="FK_Channel_FKNetworkID">
           <End Type="ircbotModel.Network" Role="Network" Multiplicity="1" />
@@ -785,7 +820,7 @@
           <Property Name="FKChannelID" Type="Int32" Nullable="false" />
           <Property Name="At" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Nick" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Length" Type="Int32" />
+          <Property Name="Length" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Channel" Relationship="ircbotModel.FK_Line_FKChannelID" FromRole="Line" ToRole="Channel" />
         </EntityType>
         <Association Name="FK_Line_FKChannelID">
@@ -816,7 +851,7 @@
           <Property Name="Description" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
           <Property Name="NSFW" Type="Boolean" />
           <NavigationProperty Name="Votes" Relationship="ircbotModel.FK_Vote_FKURLID" FromRole="URL" ToRole="Vote" />
-          <Property Name="VoteCount" Type="Int32" />
+          <Property Name="VoteCount" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_URL_FKChannelID">
           <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="1" />
@@ -1195,6 +1230,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="LinesGroupedDay">
+          <Key>
+            <PropertyRef Name="FKChannelID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Nick" />
+          </Key>
+          <Property Name="FKChannelID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Nick" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LineCount" Type="Int32" Nullable="false" />
+          <Property Name="LengthSum" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Channel" Relationship="ircbotModel.FK_LinesGroupedDay_FKChannelID" FromRole="LinesGroupedDay" ToRole="Channel" />
+        </EntityType>
+        <Association Name="FK_LinesGroupedDay_FKChannelID">
+          <End Type="ircbotModel.Channel" Role="Channel" Multiplicity="1" />
+          <End Type="ircbotModel.LinesGroupedDay" Role="LinesGroupedDay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Channel">
+              <PropertyRef Name="ChannelID" />
+            </Principal>
+            <Dependent Role="LinesGroupedDay">
+              <PropertyRef Name="FKChannelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1386,6 +1446,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="LinesGroupedDays">
+            <EntityTypeMapping TypeName="ircbotModel.LinesGroupedDay">
+              <MappingFragment StoreEntitySet="LinesGroupedDay">
+                <ScalarProperty Name="LengthSum" ColumnName="LengthSum" />
+                <ScalarProperty Name="LineCount" ColumnName="LineCount" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="FKChannelID" ColumnName="FKChannelID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1448,6 +1519,8 @@
         <EntityTypeShape EntityType="ircbotModel.Vote" Width="1.5" PointX="4.5" PointY="11.125" />
         <AssociationConnector Association="ircbotModel.FK_Vote_FKURLID" />
         <AssociationConnector Association="ircbotModel.FK_Vote_FKUserID" />
+        <EntityTypeShape EntityType="ircbotModel.LinesGroupedDay" Width="1.5" PointX="4.625" PointY="0.5" />
+        <AssociationConnector Association="ircbotModel.FK_LinesGroupedDay_FKChannelID" />
       </Diagram>
     </Diagrams>
   </Designer>

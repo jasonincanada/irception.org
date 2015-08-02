@@ -14,7 +14,8 @@
 	        animation: false,
 	        scaleShowGridLines: false,
 	        pointDot: false,
-	        datasetStrokeWidth: 1
+	        datasetStrokeWidth: 1,
+            bezierCurveTension: .2
 	    });
 	}])
    	

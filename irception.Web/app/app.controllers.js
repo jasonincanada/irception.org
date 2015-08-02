@@ -336,15 +336,11 @@
         vm.ChannelSlug = $stateParams.channelSlug;
         vm.NetworkSlug = $stateParams.networkSlug;
 
-        vm.Message = 'Loading from server...';
-
         $http
             .get('/api/stats.ashx?channel=' + vm.ChannelSlug + '&network=' + vm.NetworkSlug + '&dataset=race')
             .success(function (data) {
-                vm.Message = 'Rendering locally...';
-
+                
                 $timeout(function () {
-                    vm.Message = '';
 
                     $scope.data = data.data;
                     $scope.series = data.series;

@@ -102,6 +102,9 @@
     <Compile Include="Line.cs">
       <DependentUpon>ircbotModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="LinesGroupedDay.cs">
+      <DependentUpon>ircbotModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Network.cs">
       <DependentUpon>ircbotModel.tt</DependentUpon>
     </Compile>

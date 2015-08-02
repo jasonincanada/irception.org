@@ -40,7 +40,7 @@ namespace irception.Web.api
                 else
                 {
                     var labels = new List<string>();
-                    var data = repo.statsRace(channelSlug, networkSlug, 14, 10, labels);
+                    var data = repo.StatsRace(channelSlug, networkSlug, 14, 10, labels);
 
                     json = JsonConvert.SerializeObject(new
                     {

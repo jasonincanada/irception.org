@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace irception.Domain
 {
@@ -46,9 +47,43 @@ namespace irception.Domain
                 .Lines
                 .Add(line);
 
+            IncrementStatsGrouped(line);
             SaveChanges();
 
             return line.LineID;
+        }
+
+        /// <summary>
+        /// Update grouped-by stats for this user for this day/hour/etc.  Does not call SaveChanges() on the context.
+        /// </summary>
+        /// <param name="line"></param>
+        private void IncrementStatsGrouped(Line line)
+        {
+            DateTime now = DateTime.UtcNow.Date;
+
+            var byDay = _context
+                .LinesGroupedDays
+                .Where(l => l.FKChannelID == line.FKChannelID
+                            && l.Nick == line.Nick
+                            && l.Date == now)
+                .FirstOrDefault();
+
+            if (byDay == null)
+            {
+                byDay = new LinesGroupedDay
+                {
+                    FKChannelID = line.FKChannelID,
+                    Nick = line.Nick,
+                    Date = now
+                };
+
+                _context
+                    .LinesGroupedDays
+                    .Add(byDay);
+            }
+
+            byDay.LineCount++;
+            byDay.LengthSum += line.Length;
         }
     }
 }

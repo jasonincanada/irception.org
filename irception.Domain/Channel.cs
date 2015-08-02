@@ -21,6 +21,7 @@ namespace irception.Domain
             this.Ignores = new HashSet<Ignore>();
             this.Permissions = new HashSet<Permission>();
             this.AutoNSFWs = new HashSet<AutoNSFW>();
+            this.LinesGroupedDay = new HashSet<LinesGroupedDay>();
         }
     
         public int ChannelID { get; set; }
@@ -35,5 +36,6 @@ namespace irception.Domain
         public virtual ICollection<Ignore> Ignores { get; set; }
         public virtual ICollection<Permission> Permissions { get; set; }
         public virtual ICollection<AutoNSFW> AutoNSFWs { get; set; }
+        public virtual ICollection<LinesGroupedDay> LinesGroupedDay { get; set; }
     }
 }

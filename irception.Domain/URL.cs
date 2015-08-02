@@ -29,7 +29,7 @@ namespace irception.Domain
         public string Title { get; set; }
         public string Description { get; set; }
         public Nullable<bool> NSFW { get; set; }
-        public Nullable<int> VoteCount { get; set; }
+        public int VoteCount { get; set; }
     
         public virtual Channel Channel { get; set; }
         public virtual ICollection<Vote> Votes { get; set; }

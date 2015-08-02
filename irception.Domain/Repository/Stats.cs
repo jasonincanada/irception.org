@@ -27,18 +27,27 @@ namespace irception.Domain
         /// <returns></returns>
         public List<LabelValuePair> StatsLineCounts(string channelSlug, string networkSlug, int daysAgo, int nickCount)
         {
-            DateTime minDate = DateTime.UtcNow.AddDays(-daysAgo);
+            DateTime minDate = DateTime.UtcNow.Date.AddDays(-daysAgo);
+            
+            var channelID = _context
+                .Channels
+                .Where(c => c.Slug == channelSlug
+                            && c.Network.Slug == networkSlug)
+                .Select(s => s.ChannelID)
+                .FirstOrDefault();
 
             return _context
-                .Lines
-                .Where(l => l.Channel.Slug == channelSlug
-                            && l.Channel.Network.Slug == networkSlug
-                            && l.At >= minDate)
-                .GroupBy(g => new { g.Nick })
+                .LinesGroupedDays
+                .Where(l => l.FKChannelID == channelID
+                            && l.Date >= minDate)
+                .GroupBy(g => new
+                {
+                    g.Nick
+                })
                 .Select(l => new LabelValuePair
                 {
                     Label = l.Key.Nick,
-                    Value = l.Count()
+                    Value = l.Sum(ll => ll.LineCount)
                 })
                 .OrderByDescending(o => o.Value)
                 .Take(nickCount)
@@ -46,29 +55,21 @@ namespace irception.Domain
         }
 
         // Daily intervals for now
-        public List<LabelValuesPair> statsRace(string channelSlug, string networkSlug, int intervalCount, int nickCount, List<string> intervalLabels)
+        public List<LabelValuesPair> StatsRace(string channelSlug, string networkSlug, int intervalCount, int nickCount, List<string> intervalLabels)
         {
-            DateTime minDate = DateTime.UtcNow.AddDays(-intervalCount);
-                        
+            DateTime minDate = DateTime.UtcNow.Date.AddDays(-intervalCount);
+
+            var channelID = _context
+                .Channels
+                .Where(c => c.Slug == channelSlug
+                            && c.Network.Slug == networkSlug)
+                .Select(s => s.ChannelID)
+                .FirstOrDefault();
+
             var deets = _context
-                .Lines
-                .Where(l => l.Channel.Slug == channelSlug
-                            && l.Channel.Network.Slug == networkSlug
-                            && l.At >= minDate)
-                .GroupBy(g => new
-                {
-                    Nick = g.Nick,
-                    Year = g.At.Year,
-                    Month = g.At.Month,
-                    Day = g.At.Day
-                })
-                .ToList()
-                .Select(l => new
-                {
-                    l.Key.Nick,
-                    Date = new DateTime(l.Key.Year, l.Key.Month, l.Key.Day),
-                    LineCount = l.Count()
-                })
+                .LinesGroupedDays
+                .Where(l => l.Date >= minDate
+                        && l.FKChannelID == channelID)
                 .ToList();
                         
             var nicks = deets

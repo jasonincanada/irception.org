@@ -40,5 +40,6 @@ namespace irception.Domain
         public DbSet<AutoNSFW> AutoNSFWs { get; set; }
         public DbSet<ChannelVisit> ChannelVisits { get; set; }
         public DbSet<Vote> Votes { get; set; }
+        public DbSet<LinesGroupedDay> LinesGroupedDays { get; set; }
     }
 }

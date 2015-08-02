@@ -12,13 +12,13 @@ namespace irception.Domain
     using System;
     using System.Collections.Generic;
     
-    public partial class Line
+    public partial class LinesGroupedDay
     {
-        public long LineID { get; set; }
         public int FKChannelID { get; set; }
-        public System.DateTime At { get; set; }
+        public System.DateTime Date { get; set; }
         public string Nick { get; set; }
-        public int Length { get; set; }
+        public int LineCount { get; set; }
+        public int LengthSum { get; set; }
     
         public virtual Channel Channel { get; set; }
     }

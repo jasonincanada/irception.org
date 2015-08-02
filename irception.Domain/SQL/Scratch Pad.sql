@@ -1,4 +1,39 @@
 ﻿
+/*
+
+truncate table linesgroupedday
+insert linesgroupedday
+select 
+	fkchannelid,
+	CAST(At AS DATE),
+	nick,
+	count(1),
+	sum(length)
+from
+	line
+group by
+	fkchannelid,
+	CAST(At AS DATE),
+	nick
+
+--alter table Line alter column Length int not null
+
+create table LinesGroupedDay (
+	FKChannelID INT NOT NULL,
+	[Date] DATETIME NOT NULL,
+	Nick varchar(50) NOT NULL,
+	LineCount int not null,
+	LengthSum int not null
+)
+
+alter table LinesGroupedDay
+add constraint PK_LinesGroupedDay
+primary key (FKChannelID, [Date], Nick)
+
+alter table LinesGroupedDay
+add constraint FK_LinesGroupedDay_FKChannelID
+foreign key (FKChannelID)
+references Channel(ChannelID)
 
 create table Vote (
 	FKURLID int not null,
@@ -19,7 +54,6 @@ add constraint FK_Vote_FKURLID
 foreign key (FKURLID)
 references [URL](URLID)
 
-/*
 drop table FirstChannelVisit
 
 create table ChannelVisit (

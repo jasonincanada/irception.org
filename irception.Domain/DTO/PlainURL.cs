@@ -35,7 +35,7 @@ namespace irception.Domain.DTO
                 Title = url.Title,
                 Description = url.Description,
                 NSFW = url.NSFW ?? false,
-                VoteCount = url.VoteCount ?? 0
+                VoteCount = url.VoteCount
             };
         }
     }
