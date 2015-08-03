@@ -1,4 +1,6 @@
 ﻿
 <span class="irception-directive-user">
-    <a ui-sref="user({ Username: user.Username })"><i class="fa fa-fw fa-user"></i>{{ user.Username }}</a>
+    <a ui-sref="user({ Username: user.Username })"><i class="fa fa-fw fa-user"></i>{{ user.Username }}
+        :
+        <span class="invite-level">{{ user.InviteLevel }}</span></a>
 </span>

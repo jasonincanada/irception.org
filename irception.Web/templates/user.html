@@ -14,6 +14,32 @@
             <p>{{ vm.User.DateRegisteredDisplay }} &nbsp;</p>
         </div>
     </div>
+    
+    <div class="row mod-section-row">
+        <div class="col-md-3 mod-section">User Tag</div>
+
+        <div class="col-md-9 mod-section-contents">
+            <p><irception-user user="vm.User" /></p>
+        </div>
+    </div>
+
+    <div class="row mod-section-row" ng-if="vm.InvitedBy">
+        <div class="col-md-3 mod-section">Invited By</div>
+
+        <div class="col-md-9 mod-section-contents">
+            <p><irception-user user="vm.InvitedBy" /></p>
+        </div>
+    </div>
+
+    <div class="row mod-section-row" ng-show="vm.Invitees.length">
+        <div class="col-md-3 mod-section">Invitees</div>
+
+        <div class="col-md-9 mod-section-contents" style="padding-top: 10px;">
+            <ul>
+                <li ng-repeat="invitee in vm.Invitees"><irception-user user="invitee" /></li>
+            </ul>            
+        </div>
+    </div>        
 
     <div class="row mod-section-row">
         <div class="col-md-3 mod-section">Signature</div>

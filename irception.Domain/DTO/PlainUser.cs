@@ -16,10 +16,12 @@ namespace irception.Domain.DTO
         public int InviteLevel { get; set; }
         public string DateRegisteredDisplay { get; set; }
         public List<PlainPermission> Permissions { get; set; }
+        public List<PlainUser> Invitees { get; set; }
+        public PlainUser InvitedBy { get; set; }
 
-        public static PlainUser FromModel(User user)
+        public static PlainUser FromModel(User user, bool withInvitees = false)
         {
-            return new PlainUser
+            var u = new PlainUser
             {
                 UserID = user.UserID,
                 Username = user.Username,
@@ -34,6 +36,16 @@ namespace irception.Domain.DTO
                     })
                     .ToList()
             };
+
+            if (withInvitees)
+            {
+                u.Invitees = user
+                    .Invitees
+                    .Select(i => FromModel(i.UserAcceptedBy))
+                    .ToList();
+            }
+
+            return u;
         }
     }
 }

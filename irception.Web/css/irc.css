@@ -128,15 +128,12 @@ tr.channel-row:hover span.mod-action {
 .irception table.small-crumbs .crumbs {
   font-size: 14pt;
 }
-.mod-section-row > div {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
 .mod-section {
   color: #aa3a50;
   text-align: right;
-  font-family: Roboto;
-  font-size: 15pt;
+  font-family: Raleway;
+  font-size: 14pt;
+  padding-top: 6px;
 }
 .mod-section-contents {
   border-left: solid 1px #dddddd;
@@ -144,8 +141,7 @@ tr.channel-row:hover span.mod-action {
 .mod-section-contents > p {
   color: #aaaaaa;
   font-family: Roboto;
-  font-size: 10pt;
-  margin-top: 7px;
+  padding-top: 12px;
 }
 .mod-section-contents ul {
   list-style: none;

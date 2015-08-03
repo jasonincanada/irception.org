@@ -12,13 +12,31 @@ namespace irception.Web.api
     {
         public void ProcessRequest(HttpContext context)
         {
-            var repo = new Repository();
-            var user = repo.GetUser(context.Request["username"]);
+            string json = "{}";
 
-            var json = JsonConvert.SerializeObject(new
+            var repo = new Repository();
+            var model = repo.GetUser(context.Request["username"]);
+            var user = PlainUser.FromModel(model, true);
+
+            if (user.InviteLevel > 0)
             {
-                User = PlainUser.FromModel(user)
-            });
+                var invitedby = PlainUser.FromModel(repo.GetUser(model.FKUserIDInvitedBy ?? 0), false);
+
+                json = JsonConvert.SerializeObject(new
+                {
+                    User = user,
+                    InvitedBy = invitedby,
+                    Invitees = user.Invitees
+                });
+            }
+            else
+            {
+                json = JsonConvert.SerializeObject(new
+                {
+                    User = user,
+                    Invitees = user.Invitees
+                });
+            }
 
             SetNoCaching(context);
             context.Response.ContentType = "text/json";

@@ -326,7 +326,23 @@ namespace irception.Domain
         {
             return _context
                 .Users
+                .Include("Invite.UserInvitedBy")
+                .Include("Invitees.UserAcceptedBy")
                 .Where(u => u.Username == username)
+                .FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Return publically-viewable information for a user
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public User GetUser(int userID)
+        {
+            return _context
+                .Users
+                .Include("Invite.UserInvitedBy")
+                .Where(u => u.UserID == userID)
                 .FirstOrDefault();
         }
     }    

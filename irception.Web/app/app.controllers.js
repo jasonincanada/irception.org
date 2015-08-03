@@ -19,6 +19,8 @@
         
         DataService.getUser(vm.Username, function (data) {
             vm.User = data.User;
+            vm.InvitedBy = data.InvitedBy;
+            vm.Invitees = data.Invitees;
         });
 
         return vm;
