@@ -11,7 +11,7 @@
 	    
 	    ChartJsProvider.setOptions({
 	        colours: ['#A3A7AF'],
-	        animation: true,
+	        animation: false,
 	        scaleShowGridLines: false,
 	        pointDot: false,
 	        datasetStrokeWidth: 1,
