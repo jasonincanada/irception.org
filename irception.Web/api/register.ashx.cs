@@ -2,6 +2,7 @@
 using irception.Domain.DTO;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Web;
 
 namespace irception.Web.api
@@ -55,11 +56,14 @@ namespace irception.Web.api
 
                     Token token = repo.GetOrCreateToken(user);
 
+                    List<FirstChannelVisit> channelsVisited = repo.GetFirstChannelVisits(user.UserID);
+
                     json = JsonConvert.SerializeObject(new
                     {
                         success = true,
                         User = PlainUser.FromModel(user),
-                        Token = PlainToken.FromModel(token)
+                        Token = PlainToken.FromModel(token),
+                        ChannelsVisited = channelsVisited
                     });
                 }                
             }

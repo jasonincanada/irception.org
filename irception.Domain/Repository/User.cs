@@ -254,6 +254,14 @@ namespace irception.Domain
                 Username = username
             };
 
+            user
+                .ChannelVisits
+                .Add(new ChannelVisit
+                {
+                    FKChannelID = invite.FKChannelID,
+                    DateVisit = DateTime.UtcNow
+                });
+
             _context
                 .Users
                 .Add(user);
@@ -267,6 +275,23 @@ namespace irception.Domain
         }
 
         /// <summary>
+        /// Adds a ChannelVisit record for this user/channel. Does not call SaveChanges() on the context.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="channel"></param>
+        private void AddChannelVisit(User user, Channel channel)
+        {
+            _context
+                .ChannelVisits
+                .Add(new ChannelVisit
+                {
+                    FKChannelID = channel.ChannelID,
+                    FKUserID = user.UserID,
+                    DateVisit = DateTime.UtcNow
+                });
+        }
+
+        /// <summary>
         /// Get an invite by its SUID
         /// </summary>
         /// <param name="suid"></param>
@@ -275,6 +300,7 @@ namespace irception.Domain
         {
             return _context
                 .Invites
+                .Include("Channel")
                 .Include("UserInvitedBy")
                 .Where(i => i.SUID == suid)
                 .FirstOrDefault();
