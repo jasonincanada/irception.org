@@ -371,5 +371,25 @@ namespace irception.Domain
                 .Where(u => u.UserID == userID)
                 .FirstOrDefault();
         }
+
+        /// <summary>
+        /// Update the signature for this user
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="signature"></param>
+        public void UpdateSignature(User user, string signature)
+        {
+            var model = _context
+                .Users
+                .Where(u => u.UserID == user.UserID)
+                .FirstOrDefault();
+
+            if (model == null)
+                return;
+
+            model.Signature = signature;
+
+            SaveChanges();
+        }
     }    
 }

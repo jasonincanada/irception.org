@@ -15,12 +15,13 @@
         var vm = this;
 
         vm.Session = Session;
-        vm.Username = $stateParams.Username;
+        vm.Username = $stateParams.Username;        
         
         DataService.getUser(vm.Username, function (data) {
             vm.User = data.User;
+            vm.Signature = data.User.Signature;
             vm.InvitedBy = data.InvitedBy;
-            vm.Invitees = data.Invitees;
+            vm.Invitees = data.Invitees;            
         });
 
         return vm;
@@ -45,19 +46,40 @@
         return vm;
     });
 
-    app.controller('MeController', function ($state, Session, DataService) {
+    app.controller('MeController', function ($state, $timeout, Session, DataService) {
         var vm = this;
 
         if (Session.UserID == 0) {
             $state.go('login');
         }
 
-        vm.Session = Session;        
+        vm.Session = Session;
+        vm.SignatureEdited = vm.Session.Signature;
+
+        vm.editSignature = function () {            
+            vm.Editing = true;
+
+            $timeout(function () {
+                $('#signature').focus();
+            });
+        };
+
+        vm.cancelSignature = function () {            
+            vm.Editing = false;
+        };
+
+        vm.saveSignature = function () {
+
+            DataService.saveSignature(vm.SignatureEdited, function (data) {                                
+                vm.Session.Signature = vm.SignatureEdited;
+                vm.cancelSignature();
+            });            
+        };
 
         vm.logout = function () {
             Session.reset();
             $state.go('login');
-        }
+        };
 
         vm.login = function () {
             $state.go('login');

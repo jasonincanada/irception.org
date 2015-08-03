@@ -12,5 +12,15 @@
             }
         }
     });
+
+    app.directive('signature', function () {
+        return {
+            templateUrl: 'templates/directives/signature.html',
+            restrict: 'E',
+            scope: {
+                signature: '='
+            }
+        }
+    });
             
 })();

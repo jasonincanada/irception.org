@@ -14,6 +14,7 @@ namespace irception.Domain.DTO
         public int UserID { get; set; }
         public string Username { get; set; }
         public int InviteLevel { get; set; }
+        public string Signature { get; set; }
         public string DateRegisteredDisplay { get; set; }
         public List<PlainPermission> Permissions { get; set; }
         public List<PlainUser> Invitees { get; set; }
@@ -27,6 +28,7 @@ namespace irception.Domain.DTO
                 Username = user.Username,
                 InviteLevel = user.InviteLevel,
                 DateRegisteredDisplay = string.Format("{0:MMM d, yyyy}", user.DateAdded),
+                Signature = user.Signature,
                 Permissions = user
                     .Permissions
                     .Select(p => new PlainPermission

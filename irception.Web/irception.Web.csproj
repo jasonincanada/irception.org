@@ -76,6 +76,7 @@
     <Content Include="api\mod.ashx" />
     <Content Include="api\user.ashx" />
     <Content Include="api\stats.ashx" />
+    <Content Include="api\me.ashx" />
     <None Include="css\irc.less" />
     <Content Include="app\app.controllers.js" />
     <Content Include="app\app.directives.js" />
@@ -104,6 +105,7 @@
     <Content Include="templates\channel.html" />
     <Content Include="templates\config.html" />
     <Content Include="templates\directives\irception-user.html" />
+    <Content Include="templates\directives\signature.html" />
     <Content Include="templates\invite.html" />
     <Content Include="templates\login.html" />
     <Content Include="templates\me.html" />
@@ -123,6 +125,9 @@
     </Compile>
     <Compile Include="api\chan.ashx.cs">
       <DependentUpon>chan.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="api\me.ashx.cs">
+      <DependentUpon>me.ashx</DependentUpon>
     </Compile>
     <Compile Include="api\mod.ashx.cs">
       <DependentUpon>mod.ashx</DependentUpon>

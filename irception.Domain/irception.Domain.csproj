@@ -57,6 +57,7 @@
     <Compile Include="API\InviteeNickRequest.cs" />
     <Compile Include="API\InviteRequest.cs" />
     <Compile Include="API\LoginRequest.cs" />
+    <Compile Include="API\MeRequest.cs" />
     <Compile Include="API\RegisterRequest.cs" />
     <Compile Include="API\URLRequest.cs" />
     <Compile Include="Auth.cs">

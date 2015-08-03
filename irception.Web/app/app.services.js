@@ -13,6 +13,7 @@
         service.loggedIn = function (data) {
             service.UserID = data.User.UserID;
             service.Username = data.User.Username;
+            service.Signature = data.User.Signature;
             service.Permissions = data.User.Permissions;
             service.Token = data.Token.Token;
             service.IP = data.Token.IP;

@@ -32,6 +32,7 @@ namespace irception.Domain
         public string PasswordSHA256 { get; set; }
         public Nullable<int> FKUserIDInvitedBy { get; set; }
         public int InviteLevel { get; set; }
+        public string Signature { get; set; }
     
         public virtual ICollection<Ignore> Ignores { get; set; }
         public virtual ICollection<Permission> Permissions { get; set; }

@@ -179,6 +179,7 @@
           <Property Name="PasswordSHA256" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="FKUserIDInvitedBy" Type="int" />
           <Property Name="InviteLevel" Type="int" Nullable="false" />
+          <Property Name="Signature" Type="varchar" MaxLength="4000" />
         </EntityType>
         <EntityType Name="Vote">
           <Key>
@@ -630,6 +631,7 @@
           <NavigationProperty Name="Invite" Relationship="ircbotModel.FK_Invite_FKUserIDAcceptedBy" FromRole="User" ToRole="Invite" />
           <NavigationProperty Name="ChannelVisits" Relationship="ircbotModel.FK_ChannelVisit_FKUserID" FromRole="User" ToRole="ChannelVisit" />
           <NavigationProperty Name="Votes" Relationship="ircbotModel.FK_Vote_FKUserID" FromRole="User" ToRole="Vote" />
+          <Property Name="Signature" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityContainer Name="ircbotEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Users" EntityType="Self.User" />
@@ -1264,6 +1266,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="ircbotModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Signature" ColumnName="Signature" />
                 <ScalarProperty Name="InviteLevel" ColumnName="InviteLevel" />
                 <ScalarProperty Name="FKUserIDInvitedBy" ColumnName="FKUserIDInvitedBy" />
                 <ScalarProperty Name="PasswordSHA256" ColumnName="PasswordSHA256" />

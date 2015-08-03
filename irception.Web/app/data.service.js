@@ -3,7 +3,7 @@
 
     var app = angular.module('ircApp');
 
-    app.service('DataService', function ($http) {
+    app.service('DataService', function ($http, Session) {
         var service = this;
         
         service.getConfig = function (successFunc) {
@@ -81,6 +81,15 @@
                 .get('/api/stats.ashx?channel=' + channelSlug 
                         + '&network=' + networkSlug 
                         + '&dataset=' + dataset)
+                .success(successFunc);
+        };
+
+        service.saveSignature = function (signature, successFunc) {
+            $http
+                .post('api/me.ashx', {
+                    Token: Session.Token,
+                    Signature: signature
+                })
                 .success(successFunc);
         };
 

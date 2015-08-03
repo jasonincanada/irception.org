@@ -1,11 +1,13 @@
 ﻿/* irc.less - Run through dotLess compiler to create irc.css output */
 
+@signature: #999;
 @redness: #AA3A50;
 @rednessLink: #CA8F9B + #111;
 
 @smallHeadings: #AAA;
 @lines: #DDD;
 @nickColumnWidth: 100px + 20px;
+
 
 .navbar-redness {
   background-color: @redness;
@@ -26,7 +28,6 @@
 }
 
 .irc-jumbo {
-    font-family: 'Source Sans Pro', sans-serif;
     font-size: 15pt;
     line-height: 25pt;
     color: #777;
@@ -169,7 +170,7 @@ tr.channel-row:hover span.mod-action {
 }
 
 .mod-section {    
-    color: @redness;    
+    color: #666;
     text-align: right;
     font-family: Raleway;
     font-size: 14pt;
@@ -211,6 +212,12 @@ tr.channel-row:hover span.mod-action {
         margin-left: 15px;
         padding-left: 15px;
     }
+
+    textarea {
+        width: 80%;
+        height: 200px;
+        border-color: @lines;
+    }
 }
 
 .channel-visit-time {
@@ -220,4 +227,10 @@ tr.channel-row:hover span.mod-action {
 
 .irception-directive-user {
     font-family: Raleway;
+}
+
+.irception-signature {
+    font-family: Cousine;
+    color: @signature;
+    white-space: pre-wrap;
 }

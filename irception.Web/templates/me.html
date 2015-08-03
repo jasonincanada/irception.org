@@ -57,6 +57,26 @@
         </div>
     </div>
 
+    <!-- Signature -->
+    <div class="row mod-section-row">
+        <div class="col-md-3 mod-section">Signature</div>
+
+        <div class="col-md-9 mod-section-contents">
+            <div ng-hide="vm.Editing" ng-click="vm.editSignature()" style="cursor: pointer;">
+                <span ng-hide="vm.Session.Signature">Click to add your signature</span>                
+                <signature signature="vm.Session.Signature"></signature> 
+            </div>
+
+            <div ng-show="vm.Editing">
+                <textarea ng-model="vm.SignatureEdited" id="signature" class="irception-signature"></textarea>
+            
+                <br />
+                <button class="btn" ng-click="vm.saveSignature()">Save Signature</button>
+                <button class="btn" ng-click="vm.cancelSignature()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Actions -->
     <div class="row mod-section-row">
         <div class="col-md-3 mod-section">Actions</div>
