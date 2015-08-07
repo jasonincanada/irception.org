@@ -9,7 +9,7 @@
                     <tr>
                         <th style="width: 90px;"></th>
                         <th></th>
-                        <th class="url-row-padding" colspan="2">
+                        <th class="url-row-padding">
                             <span class="crumbs">                                
                                 / {{ vm.NetworkSlug }}
                                 / {{ vm.ChannelSlug }}
@@ -51,10 +51,11 @@
                                 <span ng-show="url.NSFW" class="url-nsfw">NSFW</span>
                                 <a href="" ng-href="{{ url.URL }}" target="_blank">{{ url.URL }}</a>                                
                             </div>             
-                        </td>
-                        <td ng-if="vm.Permission.attr">
-                            <span class="mod-action mod-action-nsfw" ng-click="vm.setNSFW(url.URLID)" ng-if="! url.NSFW"><nobr>+NSFW</nobr></span>
-                            <span class="mod-action mod-action-unnsfw" ng-click="vm.unsetNSFW(url.URLID)" ng-if="url.NSFW"><nobr>-NSFW</nobr></span>
+
+                            <div class="mod-actions" ng-if="vm.Permission.attr">
+                                <span class="mod-action mod-action-nsfw" ng-click="vm.setNSFW(url.URLID)" ng-if="! url.NSFW"><nobr>+NSFW</nobr></span>
+                                <span class="mod-action mod-action-unnsfw" ng-click="vm.unsetNSFW(url.URLID)" ng-if="url.NSFW"><nobr>-NSFW</nobr></span>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
