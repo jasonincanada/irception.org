@@ -31,12 +31,12 @@
         </div>
     </div>
 
-    <div class="row mod-section-row" ng-show="vm.Invitees.length">
+    <div class="row mod-section-row" ng-show="vm.User.Invitees.length">
         <div class="col-md-3 mod-section">Invitees</div>
 
         <div class="col-md-9 mod-section-contents" style="padding-top: 10px;">
             <ul>
-                <li ng-repeat="invitee in vm.Invitees"><irception-user user="invitee" /></li>
+                <li ng-repeat="invitee in vm.User.Invitees"><irception-user user="invitee" /></li>
             </ul>            
         </div>
     </div>        
