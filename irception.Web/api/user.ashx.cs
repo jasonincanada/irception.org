@@ -25,16 +25,14 @@ namespace irception.Web.api
                 json = JsonConvert.SerializeObject(new
                 {
                     User = user,
-                    InvitedBy = invitedby,
-                    Invitees = user.Invitees
+                    InvitedBy = invitedby
                 });
             }
             else
             {
                 json = JsonConvert.SerializeObject(new
                 {
-                    User = user,
-                    Invitees = user.Invitees
+                    User = user
                 });
             }
 

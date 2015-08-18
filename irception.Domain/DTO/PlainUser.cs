@@ -36,13 +36,15 @@ namespace irception.Domain.DTO
                         ChannelID = p.FKChannelID,
                         Permission = p.Permission1
                     })
-                    .ToList()
+                    .ToList(),
+                Invitees = new List<PlainUser>()
             };
 
             if (withInvitees)
             {
                 u.Invitees = user
                     .Invitees
+                    .Where(i => i.DateAccepted != null && i.UserAcceptedBy.DateDeleted == null)
                     .Select(i => FromModel(i.UserAcceptedBy))
                     .ToList();
             }
