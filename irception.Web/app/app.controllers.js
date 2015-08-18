@@ -326,11 +326,36 @@
         $scope.$on('session.login', onLogin);
 
         vm.setNSFW = function (urlID) {
-            DataService.setAttr(urlID, 'nsfw', function () { });            
+            DataService.setAttr(urlID, 'nsfw', function () { });
+
+            // Don't wait for the request to finish, tag it in the UI right away
+            vm.tag(urlID, '+NSFW');
         };
 
         vm.unsetNSFW = function (urlID) {
             DataService.unsetAttr(urlID, 'nsfw', function () { });
+
+            vm.tag(urlID, '-NSFW');
+        };
+
+        vm.tag = function (id, tag) {
+            for (var i = 0; i < vm.URLs.length; i++) {
+                if (vm.URLs[i].URLID == id) {
+                    var url = vm.URLs[i];
+
+                    switch (tag) {
+                        case '+NSFW':
+                            url.NSFW = true;
+                            break;
+
+                        case '-NSFW':
+                            url.NSFW = false;
+                            break;
+                    }
+                    
+                    break;
+                }
+            }
         };
 
         return vm;
